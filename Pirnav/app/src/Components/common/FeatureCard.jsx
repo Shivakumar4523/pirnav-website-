@@ -6,7 +6,7 @@ const FeatureCard = ({ icon: Icon, title, description, delay = 0 }) => {
   return (
     <article
       ref={ref}
-      className="feature-card reveal fade-up"
+      className="feature-card reveal"
       style={{ transitionDelay: `${delay}ms` }}
     >
       <div className="feature-icon">{Icon && <Icon size={22} />}</div>

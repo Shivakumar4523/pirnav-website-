@@ -1,4 +1,4 @@
-import HeroSection from "../../components/common/HeroSection";
+import { Link } from "react-router-dom";
 import SectionWrapper from "../../components/common/SectionWrapper";
 import ServiceCard from "../../components/common/ServiceCard";
 import CTASection from "../../components/common/CTASection";
@@ -7,14 +7,27 @@ import { serviceItems } from "../../data/siteContent";
 const PublicServices = () => {
   return (
     <div className="page-shell">
-      <HeroSection
-        image="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=2400&q=85"
-        imageAlt="Pirnav services"
-        eyebrow="Services"
-        title="Our Technology Services"
-        description="We help enterprises design, build, and scale reliable technology platforms across engineering, cloud, data, and business-critical systems."
-        breadcrumbs={[{ label: "Home", to: "/" }, { label: "Services" }]}
-      />
+      <section
+        className="page-banner page-banner-centered page-banner-light"
+        style={{
+          "--banner-image":
+            "url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=2400&q=85')",
+        }}
+      >
+        <div className="section-shell page-banner-content">
+          <span className="section-eyebrow section-eyebrow-light">Services</span>
+          <h1>Our Technology Services</h1>
+          <div className="breadcrumb-row">
+            <Link to="/">Home</Link>
+            <span>/</span>
+            <span>Services</span>
+          </div>
+          <p>
+            We help enterprises design, build, and scale reliable technology platforms
+            across engineering, cloud, data, and business-critical systems.
+          </p>
+        </div>
+      </section>
 
       <SectionWrapper
         className="section-surface-white"

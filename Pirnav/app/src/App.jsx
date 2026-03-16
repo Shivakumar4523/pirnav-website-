@@ -42,7 +42,6 @@ function AppContent() {
   useEffect(() => {
     const selector = [
       ".reveal",
-      ".fade-up",
       ".stat-card",
       ".service-box",
       ".card",
@@ -73,7 +72,7 @@ function AppContent() {
     elements.forEach((element) => element.classList.add("reveal"));
 
     if (!("IntersectionObserver" in window)) {
-      elements.forEach((element) => element.classList.add("active", "visible"));
+      elements.forEach((element) => element.classList.add("active"));
       return undefined;
     }
 
@@ -82,8 +81,7 @@ function AppContent() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("active", "visible");
-          } else {
-            entry.target.classList.remove("active", "visible");
+            observer.unobserve(entry.target);
           }
         });
       },

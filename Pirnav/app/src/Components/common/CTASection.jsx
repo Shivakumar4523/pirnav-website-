@@ -1,6 +1,5 @@
 import Button from "./Button";
 import useRevealOnScroll from "./useRevealOnScroll";
-import NetworkBackground from "./NetworkBackground";
 
 const CTASection = ({
   eyebrow,
@@ -14,8 +13,7 @@ const CTASection = ({
 
   return (
     <section className={`section-block ${className}`.trim()}>
-      <NetworkBackground />
-      <div ref={ref} className="section-shell reveal fade-up">
+      <div ref={ref} className="section-shell reveal">
         <div className="cta-panel">
           <div className="cta-copy">
             {eyebrow && <span className="section-eyebrow section-eyebrow-light">{eyebrow}</span>}

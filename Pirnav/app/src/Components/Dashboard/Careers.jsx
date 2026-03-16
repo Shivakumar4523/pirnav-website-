@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import HeroSection from "../../components/common/HeroSection";
+import { Link, useNavigate } from "react-router-dom";
 import SectionWrapper from "../../components/common/SectionWrapper";
 import FeatureCard from "../../components/common/FeatureCard";
 import CTASection from "../../components/common/CTASection";
@@ -41,45 +40,59 @@ const Careers = () => {
 
   return (
     <div className="page-shell">
-      <HeroSection
-        image="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop"
-        imageAlt="Pirnav careers"
-        eyebrow="Careers"
-        title="Build your career with us."
-        description="Work with talented engineers and contribute to impactful technology solutions across enterprise platforms, applications, and modernization programs."
-        breadcrumbs={[{ label: "Home", to: "/" }, { label: "Careers" }]}
-      />
+      <section
+        className="page-banner page-banner-light"
+        style={{
+          "--banner-image":
+            "url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=2400&q=85')",
+        }}
+      >
+        <div className="section-shell page-banner-content">
+          <span className="section-eyebrow section-eyebrow-light">Careers</span>
+          <h1>Build your career with us.</h1>
+          <div className="breadcrumb-row">
+            <Link to="/">Home</Link>
+            <span>/</span>
+            <span>Careers</span>
+          </div>
+          <p>
+            Work with talented engineers and contribute to impactful technology solutions
+            across enterprise platforms, applications, and modernization programs.
+          </p>
+        </div>
+      </section>
 
       <SectionWrapper
-        className="section-surface-white careers-section"
+        className="section-surface-white"
         eyebrow="Why Join Us"
         title="A recruiting experience that reflects modern engineering teams."
         description="We create opportunities for engineers and technology professionals to work on meaningful delivery programs with collaborative teams and long-term growth."
-        contentClassName="careers-layout"
       >
-        <article className="career-card career-intro">
-          <h3>Work on modern platforms with experienced teams</h3>
-          <p>
-            Join an environment focused on real delivery ownership, practical learning,
-            and technology work that supports measurable client outcomes.
-          </p>
-          <div className="careers-benefits-list">
-            <span className="mini-tag">Flexible work environment</span>
-            <span className="mini-tag">Learning and development</span>
-            <span className="mini-tag">Modern technologies</span>
-            <span className="mini-tag">Collaborative engineering culture</span>
+        <div className="career-layout careers-overview-layout">
+          <article className="career-card career-intro">
+            <h3>Work on modern platforms with experienced teams</h3>
+            <p>
+              Join an environment focused on real delivery ownership, practical learning,
+              and technology work that supports measurable client outcomes.
+            </p>
+            <div className="careers-benefits-list">
+              <span className="mini-tag">Flexible work environment</span>
+              <span className="mini-tag">Learning and development</span>
+              <span className="mini-tag">Modern technologies</span>
+              <span className="mini-tag">Collaborative engineering culture</span>
+            </div>
+          </article>
+          <div className="feature-grid careers-benefits-grid">
+            {whyJoinUs.map((item, index) => (
+              <FeatureCard
+                key={item.title}
+                icon={item.icon}
+                title={item.title}
+                description={item.description}
+                delay={index * 80}
+              />
+            ))}
           </div>
-        </article>
-        <div className="careers-features">
-          {whyJoinUs.map((item, index) => (
-            <FeatureCard
-              key={item.title}
-              icon={item.icon}
-              title={item.title}
-              description={item.description}
-              delay={index * 80}
-            />
-          ))}
         </div>
       </SectionWrapper>
 

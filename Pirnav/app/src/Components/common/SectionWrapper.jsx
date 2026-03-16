@@ -1,5 +1,4 @@
 import useRevealOnScroll from "./useRevealOnScroll";
-import NetworkBackground from "./NetworkBackground";
 
 const SectionWrapper = ({
   eyebrow,
@@ -15,8 +14,7 @@ const SectionWrapper = ({
 
   return (
     <section id={id} className={`section-block ${className}`.trim()}>
-      <NetworkBackground />
-      <div ref={ref} className="section-shell reveal fade-up">
+      <div ref={ref} className="section-shell reveal">
         {(eyebrow || title || description) && (
           <div className={`section-heading section-heading-${align}`}>
             {eyebrow && <span className="section-eyebrow">{eyebrow}</span>}

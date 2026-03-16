@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Briefcase, Building2, CheckCircle2, Cloud, Database, MonitorSmartphone, ShieldCheck, Users, Workflow } from "lucide-react";
 import { Link } from "react-router-dom";
 import Button from "../../components/common/Button";
 import CTASection from "../../components/common/CTASection";
-import HeroSection from "../../components/common/HeroSection";
 import SectionWrapper from "../../components/common/SectionWrapper";
 import StatsSection from "../../components/common/StatsSection";
 
@@ -105,7 +104,7 @@ const strengths = [
 const Dashboard = () => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const activeSlideData = slides[activeSlide] ?? slides[0];
+  const heroCardRef = useRef(null);
 
   useEffect(() => {
     if (isPaused) return undefined;
@@ -117,40 +116,117 @@ const Dashboard = () => {
     return () => window.clearInterval(timer);
   }, [isPaused]);
 
+  useEffect(() => {
+    const heroCard = heroCardRef.current;
+
+    if (!heroCard) return undefined;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+
+    let frameId = null;
+
+    const handleMove = (event) => {
+      const rect = heroCard.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = (y - centerY) / 35;
+      const rotateY = (centerX - x) / 35;
+
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+      }
+
+      frameId = requestAnimationFrame(() => {
+        heroCard.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+      });
+    };
+
+    const handleLeave = () => {
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+        frameId = null;
+      }
+      heroCard.style.transform = "perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+    };
+
+    heroCard.addEventListener("mousemove", handleMove);
+    heroCard.addEventListener("mouseleave", handleLeave);
+
+    return () => {
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+      }
+      heroCard.removeEventListener("mousemove", handleMove);
+      heroCard.removeEventListener("mouseleave", handleLeave);
+    };
+  }, []);
+
   return (
     <div className="page-shell">
-      <HeroSection
-        images={slides.map((slide) => slide.image)}
-        activeIndex={activeSlide}
-        imageAlt={activeSlideData.title}
-        eyebrow={activeSlideData.tag}
-        title={activeSlideData.title}
-        description={activeSlideData.description}
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-      >
-        <div className="hero-actions hero-buttons">
-          <Button to="/services">
-            Explore Services
-            <ArrowRight size={18} />
-          </Button>
-          <Button to="/contact" variant="secondary">
-            Contact Us
-          </Button>
-        </div>
+      <section className="hero hero-section homepage-hero">
+        <div className="hero-card" ref={heroCardRef}>
+          <div
+            className="section-shell hero-slider homepage-hero-shell"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
+            <div className="slider-container">
+              {slides.map((slide, index) => {
+                const isActive = index === activeSlide;
 
-        <div className="hero-slider-dots slider-dots" aria-label="Hero slide navigation">
-          {slides.map((slide, index) => (
-            <button
-              key={slide.title}
-              type="button"
-              className={`hero-slider-dot ${index === activeSlide ? "hero-slider-dot-active" : ""}`}
-              onClick={() => setActiveSlide(index)}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
+                return (
+                  <article
+                    key={slide.title}
+                    className={`hero-slide ${isActive ? "hero-slide-active" : ""}`}
+                    aria-hidden={!isActive}
+                  >
+                    <img
+                      src={slide.image}
+                      alt=""
+                      aria-hidden="true"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div className="hero-slide-copy homepage-hero-copy hero-content">
+                      {isActive && (
+                        <>
+                          <span className="section-eyebrow">{slide.tag}</span>
+                          <h1>{slide.title}</h1>
+                          <p>{slide.description}</p>
+                          <div className="hero-actions hero-buttons">
+                            <Button to="/services">
+                              Explore Services
+                              <ArrowRight size={18} />
+                            </Button>
+                            <Button to="/contact" variant="secondary">
+                              Contact Us
+                            </Button>
+                          </div>
+                        </>
+                      )}
+                    </div>
+
+                    <div className="hero-slide-spacer" aria-hidden="true" />
+                  </article>
+                );
+              })}
+            </div>
+
+            <div className="hero-slider-dots slider-dots" aria-label="Hero slide navigation">
+              {slides.map((slide, index) => (
+                <button
+                  key={slide.title}
+                  type="button"
+                  className={`hero-slider-dot ${index === activeSlide ? "hero-slider-dot-active" : ""}`}
+                  onClick={() => setActiveSlide(index)}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
         </div>
-      </HeroSection>
+      </section>
 
       <section className="executive-section">
         <div className="container">

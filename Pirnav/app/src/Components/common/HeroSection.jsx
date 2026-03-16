@@ -1,57 +1,72 @@
-import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+import Button from "./Button";
+import useRevealOnScroll from "./useRevealOnScroll";
 
 const HeroSection = ({
-  image,
-  images = [],
-  activeIndex = 0,
-  imageAlt = "Page hero",
   eyebrow,
   title,
   description,
-  breadcrumbs = [],
-  children,
-  onMouseEnter,
-  onMouseLeave,
+  primaryAction,
+  secondaryAction,
+  metrics = [],
+  image,
+  imageAlt,
   className = "",
+  imageClassName = "",
+  children,
 }) => {
-  const backgroundImages = images.length > 0 ? images : image ? [image] : [];
+  const ref = useRevealOnScroll();
 
   return (
-    <section
-      className={`hero-section fade-up ${className}`.trim()}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
-      <div className="hero-bg">
-        <div className="hero-pattern" />
-        {backgroundImages.map((src, index) => (
-          <img
-            key={`${src}-${index}`}
-            src={src}
-            alt={index === activeIndex ? imageAlt : ""}
-            aria-hidden={index !== activeIndex}
-            className={`hero-bg-image${index === activeIndex ? " hero-bg-image-active" : ""}`}
-            loading="lazy"
-            decoding="async"
-          />
-        ))}
-      </div>
+    <section className={`hero-section ${className}`.trim()}>
+      <div className="hero-noise" />
+      <div ref={ref} className="section-shell hero-grid reveal">
+        <div className="hero-copy">
+          {eyebrow && <span className="section-eyebrow">{eyebrow}</span>}
+          <h1>{title}</h1>
+          <p>{description}</p>
 
-      <div className="container hero-content">
-        {eyebrow && <span className="section-eyebrow section-eyebrow-light">{eyebrow}</span>}
-        {title && <h1>{title}</h1>}
-        {breadcrumbs.length > 0 && (
-          <div className="breadcrumb-row">
-            {breadcrumbs.map((crumb, index) => (
-              <span key={`${crumb.label}-${index}`}>
-                {index > 0 && <span className="breadcrumb-separator">/</span>}
-                {crumb.to ? <Link to={crumb.to}>{crumb.label}</Link> : <span>{crumb.label}</span>}
-              </span>
-            ))}
+          <div className="hero-actions">
+            {primaryAction && (
+              <Button to={primaryAction.to} href={primaryAction.href}>
+                {primaryAction.label}
+                <ArrowRight size={18} />
+              </Button>
+            )}
+            {secondaryAction && (
+              <Button
+                to={secondaryAction.to}
+                href={secondaryAction.href}
+                variant="secondary"
+              >
+                {secondaryAction.label}
+              </Button>
+            )}
           </div>
-        )}
-        {description && <p>{description}</p>}
-        {children}
+
+          {metrics.length > 0 && (
+            <div className="hero-metrics">
+              {metrics.map((metric) => (
+                <div key={metric.label} className="hero-metric">
+                  <strong>{metric.value}</strong>
+                  <span>{metric.label}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className={`hero-visual ${imageClassName}`.trim()}>
+          {image && (
+            <img
+              src={image}
+              alt={imageAlt}
+              loading="lazy"
+              decoding="async"
+            />
+          )}
+          {children}
+        </div>
       </div>
     </section>
   );

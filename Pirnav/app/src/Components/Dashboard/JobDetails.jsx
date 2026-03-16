@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import CTASection from "../../components/common/CTASection";
-import HeroSection from "../../components/common/HeroSection";
 
 const BASE_URL = "https://farrandly-interalar-talon.ngrok-free.dev/api";
 
@@ -123,17 +122,25 @@ const JobDetails = () => {
 
   return (
     <div className="page-shell">
-      <HeroSection
-        image="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=2400&q=85"
-        imageAlt="Career opportunity"
-        eyebrow="Career Opportunity"
-        title={job.jobTitle}
-        breadcrumbs={[
-          { label: "Home", to: "/" },
-          { label: "Careers", to: "/careers" },
-          { label: job.jobTitle },
-        ]}
-      />
+      <section
+        className="page-banner page-banner-light"
+        style={{
+          "--banner-image":
+            "url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=2400&q=85')",
+        }}
+      >
+        <div className="section-shell page-banner-content">
+          <span className="section-eyebrow section-eyebrow-light">Career Opportunity</span>
+          <h1>{job.jobTitle}</h1>
+          <div className="breadcrumb-row">
+            <Link to="/">Home</Link>
+            <span>/</span>
+            <Link to="/careers">Careers</Link>
+            <span>/</span>
+            <span>{job.jobTitle}</span>
+          </div>
+        </div>
+      </section>
 
       <section className="section-block">
         <div className="section-shell job-detail-layout">

@@ -1,4 +1,4 @@
-import HeroSection from "../../components/common/HeroSection";
+import { Link } from "react-router-dom";
 import SectionWrapper from "../../components/common/SectionWrapper";
 import FeatureCard from "../../components/common/FeatureCard";
 import StatsSection from "../../components/common/StatsSection";
@@ -8,14 +8,27 @@ import { aboutPillars, homeStats } from "../../data/siteContent";
 const About = () => {
   return (
     <div className="page-shell">
-      <HeroSection
-        image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=2070&auto=format&fit=crop"
-        imageAlt="Global digital technology network"
-        eyebrow="About Pirnav"
-        title="Technology consulting and engineering teams built for enterprise delivery."
-        description="We help organizations build scalable digital platforms, modernize engineering capabilities, and deliver reliable technology outcomes."
-        breadcrumbs={[{ label: "Home", to: "/" }, { label: "About" }]}
-      />
+      <section
+        className="page-banner page-banner-light"
+        style={{
+          "--banner-image":
+            "url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=2400&q=85')",
+        }}
+      >
+        <div className="section-shell page-banner-content">
+          <span className="section-eyebrow section-eyebrow-light">About Pirnav</span>
+          <h1>Technology consulting and engineering teams built for enterprise delivery.</h1>
+          <div className="breadcrumb-row">
+            <Link to="/">Home</Link>
+            <span>/</span>
+            <span>About</span>
+          </div>
+          <p>
+            We help organizations build scalable digital platforms, modernize engineering
+            capabilities, and deliver reliable technology outcomes.
+          </p>
+        </div>
+      </section>
 
       <SectionWrapper
         className="section-surface-white"
@@ -50,8 +63,8 @@ const About = () => {
           </div>
           <div className="story-image">
             <img
-              src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop"
-              alt="Engineering team collaboration"
+              src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=3840&q=90"
+              alt="Leadership team collaborating in a modern office"
               loading="lazy"
             />
           </div>
@@ -67,8 +80,8 @@ const About = () => {
         <div className="page-grid-2">
           <div className="story-image">
             <img
-              src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=2070&auto=format&fit=crop"
-              alt="Software developer coding"
+              src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=3840&q=90"
+              alt="Enterprise workshop session focused on technology planning"
               loading="lazy"
             />
           </div>

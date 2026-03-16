@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Mail, MapPin, Phone } from "lucide-react";
-import HeroSection from "../../components/common/HeroSection";
 import SectionWrapper from "../../components/common/SectionWrapper";
 import CTASection from "../../components/common/CTASection";
 import { company } from "../../data/siteContent";
@@ -74,14 +74,27 @@ const ContactUs = () => {
 
   return (
     <div className="page-shell">
-      <HeroSection
-        image="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2400&q=85"
-        imageAlt="Contact Pirnav"
-        eyebrow="Contact"
-        title="Start a conversation with Pirnav."
-        description="Use the contact form for project discussions, staffing requirements, or partnership inquiries."
-        breadcrumbs={[{ label: "Home", to: "/" }, { label: "Contact" }]}
-      />
+      <section
+        className="page-banner page-banner-light"
+        style={{
+          "--banner-image":
+            "url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2400&q=85')",
+        }}
+      >
+        <div className="section-shell page-banner-content">
+          <span className="section-eyebrow section-eyebrow-light">Contact</span>
+          <h1>Start a conversation with Pirnav.</h1>
+          <div className="breadcrumb-row">
+            <Link to="/">Home</Link>
+            <span>/</span>
+            <span>Contact</span>
+          </div>
+          <p>
+            Use the contact form for project discussions, staffing requirements,
+            or partnership inquiries.
+          </p>
+        </div>
+      </section>
 
       <SectionWrapper
         eyebrow="Contact Details"
