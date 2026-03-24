@@ -1,28 +1,21 @@
-import { Link } from "react-router-dom";
 import SectionWrapper from "../../components/common/SectionWrapper";
 import FeatureCard from "../../components/common/FeatureCard";
 import StatsSection from "../../components/common/StatsSection";
-import CTASection from "../../components/common/CTASection";
 import { aboutPillars, homeStats } from "../../data/siteContent";
 
 const About = () => {
   return (
     <div className="page-shell">
       <section
-        className="page-banner page-banner-light"
+        className="hero-section page-banner page-banner-left page-banner-light"
         style={{
           "--banner-image":
             "url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=2400&q=85')",
         }}
       >
-        <div className="section-shell page-banner-content">
-          <span className="section-eyebrow section-eyebrow-light">About Pirnav</span>
+        <div className="section-shell page-banner-content page-banner-left-content">
+          <span className="hero-badge">About Pirnav</span>
           <h1>Technology consulting and engineering teams built for enterprise delivery.</h1>
-          <div className="breadcrumb-row">
-            <Link to="/">Home</Link>
-            <span>/</span>
-            <span>About</span>
-          </div>
           <p>
             We help organizations build scalable digital platforms, modernize engineering
             capabilities, and deliver reliable technology outcomes.
@@ -31,14 +24,14 @@ const About = () => {
       </section>
 
       <SectionWrapper
-        className="section-surface-white"
+        className="section-surface-white about-company-overview"
         eyebrow="Company Overview"
         title="A technology consulting company focused on modern software platforms and enterprise execution."
         description="Pirnav supports application delivery, cloud modernization, QA, enterprise systems, and staffing programs through practical engineering and consulting partnerships."
       >
-        <div className="page-grid-2">
+        <div className="page-grid-2 about-company-overview-grid">
           <div className="content-stack">
-            <article className="story-card">
+            <article className="story-card about-company-overview-story">
               <h3>Built around long-term delivery partnerships</h3>
               <p>
                 We work with organizations that need dependable execution across digital
@@ -50,7 +43,7 @@ const About = () => {
                 measurable delivery discipline so technology investments create lasting value.
               </p>
             </article>
-            <div className="page-grid-2 company-principles">
+            <div className="page-grid-2 company-principles about-company-overview-principles">
               <article className="story-card">
                 <h3>Mission</h3>
                 <p>Deliver reliable technology platforms and scalable engineering support for modern enterprises.</p>
@@ -72,22 +65,22 @@ const About = () => {
       </SectionWrapper>
 
       <SectionWrapper
-        className="section-surface-muted"
+        className="section-surface-muted about-how-we-work"
         eyebrow="How We Work"
         title="Consulting thinking combined with practical engineering execution."
         description="We move from discovery to delivery with clear accountability, cross-functional collaboration, and a focus on long-term platform health."
       >
-        <div className="page-grid-2">
-          <div className="story-image">
+        <div className="page-grid-2 about-how-we-work-grid">
+          <div className="story-image about-how-we-work-image">
             <img
-              src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=3840&q=90"
-              alt="Enterprise workshop session focused on technology planning"
+              src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=3840&q=90"
+              alt="Software consulting team collaborating around laptops in a modern workspace"
               loading="lazy"
             />
           </div>
-          <div className="content-stack">
-            <article className="story-card">
-              <h3>Structured delivery for complex environments</h3>
+          <div className="content-stack about-how-we-work-content">
+            <article className="story-card about-how-we-work-story">
+              <h2>Structured delivery for complex environments</h2>
               <p>
                 Our teams support planning, implementation, modernization, and operational
                 improvement across customer-facing software, internal business systems, and
@@ -102,36 +95,29 @@ const About = () => {
         </div>
       </SectionWrapper>
 
-      <StatsSection items={homeStats} className="section-surface-white" />
+      <StatsSection items={homeStats} className="section-surface-white about-stats-section" />
 
       <SectionWrapper
-        className="section-surface-muted"
+        className="section-surface-muted about-core-strengths"
         eyebrow="Core Strengths"
         title="The principles behind our consulting and engineering model."
         description="These pillars shape how we approach planning, delivery quality, and long-term client partnerships."
-        align="center"
       >
-        <div className="strength-grid">
-          {aboutPillars.map((pillar, index) => (
+        <div className="strength-grid about-pillars-grid">
+          {aboutPillars.slice(0, 3).map((pillar, index) => (
             <FeatureCard
               key={pillar.title}
               icon={pillar.icon}
               title={pillar.title}
               description={pillar.description}
               delay={index * 80}
+              layout="horizontal"
+              className="about-pillar-card"
             />
           ))}
         </div>
       </SectionWrapper>
 
-      <CTASection
-        className="internal-page-cta"
-        eyebrow="Work With Us"
-        title="Ready to start your next project with us?"
-        description="Talk to Pirnav about building scalable technology platforms, improving delivery operations, or extending engineering capacity."
-        primaryAction={{ label: "Start a Conversation", to: "/contact" }}
-        secondaryAction={{ label: "Explore Services", to: "/services" }}
-      />
     </div>
   );
 };

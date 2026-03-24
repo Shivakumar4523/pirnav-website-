@@ -19,9 +19,8 @@ const HeroSection = ({
 
   return (
     <section className={`hero-section ${className}`.trim()}>
-      <div className="hero-noise" />
-      <div ref={ref} className="section-shell hero-grid reveal">
-        <div className="hero-copy">
+      <div ref={ref} className="hero-container hero-grid reveal">
+        <div className="hero-content hero-copy">
           {eyebrow && <span className="section-eyebrow">{eyebrow}</span>}
           <h1>{title}</h1>
           <p>{description}</p>

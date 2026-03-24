@@ -16,6 +16,7 @@ import {
   Landmark,
   Gauge,
 } from "lucide-react";
+import { products } from "./productsData";
 
 export const company = {
   name: ["Pirnav", "Software Solutions"].join(" "),
@@ -36,13 +37,35 @@ export const navLinks = [
   { label: "Contact", to: "/contact" },
 ];
 
+const serviceImageMap = {
+  "application-development":
+    "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=2400&q=85",
+  "testing-automation":
+    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=2400&q=85",
+  "maintainance-support":
+    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=2400&q=85",
+  "web-development": "/images/service.png",
+  "mobile-app-development": "/images/app.jpg",
+  "sap-solutions":
+    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=2400&q=85",
+  "oracle-solutions":
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=2400&q=85",
+  "microsoft-solutions": "/images/hero9.png",
+  cybersecurity:
+    "https://images.unsplash.com/photo-1510511459019-5dda7724fd87?auto=format&fit=crop&w=2400&q=85",
+  "ai-mlops":
+    "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=2400&q=85",
+  "data-science":
+    "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=2400&q=85",
+  "professional-services":
+    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=2400&q=85",
+};
+
 const baseServiceItems = [
   {
     slug: "application-development",
     title: "Application Development",
     icon: Rocket,
-    image:
-      "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=2400&q=85",
     summary:
       "Custom product and platform engineering for enterprise workflows and customer-facing systems.",
     intro:
@@ -63,8 +86,6 @@ const baseServiceItems = [
     slug: "testing-automation",
     title: "Testing / Automation",
     icon: ShieldCheck,
-    image:
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=2400&q=85",
     summary:
       "Quality engineering that embeds automation into every release pipeline.",
     intro:
@@ -85,8 +106,6 @@ const baseServiceItems = [
     slug: "maintainance-support",
     title: "Maintenance & Support",
     icon: Settings,
-    image:
-      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=2400&q=85",
     summary:
       "Ongoing support and optimization programs for critical applications and integrations.",
     intro:
@@ -103,8 +122,6 @@ const baseServiceItems = [
     slug: "web-development",
     title: "Web Development",
     icon: Monitor,
-    image:
-      "https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=2400&q=85",
     summary:
       "Responsive web products designed for performance, usability, and enterprise integration.",
     intro:
@@ -121,8 +138,6 @@ const baseServiceItems = [
     slug: "mobile-app-development",
     title: "Mobile App Development",
     icon: Smartphone,
-    image:
-      "https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=2400&q=85",
     summary:
       "Mobile products that connect users, operations, and backend platforms seamlessly.",
     intro:
@@ -139,8 +154,6 @@ const baseServiceItems = [
     slug: "sap-solutions",
     title: "SAP Solutions",
     icon: Database,
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=2400&q=85",
     summary:
       "SAP implementation, customization, and support services for enterprise operations.",
     intro:
@@ -157,8 +170,6 @@ const baseServiceItems = [
     slug: "oracle-solutions",
     title: "Oracle Solutions",
     icon: Server,
-    image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=2400&q=85",
     summary:
       "Oracle services spanning database platforms, enterprise applications, and modernization work.",
     intro:
@@ -175,8 +186,6 @@ const baseServiceItems = [
     slug: "microsoft-solutions",
     title: "Microsoft Solutions",
     icon: Cloud,
-    image:
-      "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2400&q=85",
     summary:
       "Microsoft ecosystem delivery for cloud, collaboration, productivity, and operations.",
     intro:
@@ -190,11 +199,57 @@ const baseServiceItems = [
     outcomes: ["Cloud maturity", "Improved collaboration", "Operational consistency"],
   },
   {
+    slug: "cybersecurity",
+    title: "Cybersecurity",
+    icon: ShieldCheck,
+    summary:
+      "Security programs that protect applications, cloud workloads, identities, and enterprise operations.",
+    intro:
+      "We help organizations strengthen security posture with practical controls, monitoring, and remediation programs aligned to platform risk and delivery speed.",
+    highlights: ["Security posture", "Identity protection", "Continuous monitoring"],
+    features: [
+      "Application, cloud, and infrastructure security assessments",
+      "Identity, access, and endpoint protection planning",
+      "Threat monitoring, remediation support, and governance improvements",
+    ],
+    outcomes: ["Reduced exposure", "Stronger compliance readiness", "Better operational resilience"],
+  },
+  {
+    slug: "ai-mlops",
+    title: "AI / MLOps",
+    icon: Cpu,
+    summary:
+      "AI enablement and MLOps foundations for model deployment, observability, and governed scale.",
+    intro:
+      "We help teams move from experimentation to production with data pipelines, model operations, and platform practices that support reliable AI delivery.",
+    highlights: ["Model operations", "AI pipelines", "Responsible scaling"],
+    features: [
+      "MLOps workflows for training, deployment, and monitoring",
+      "Feature, inference, and evaluation pipeline design",
+      "Governance patterns for reliability, cost control, and traceability",
+    ],
+    outcomes: ["Faster model delivery", "Higher AI reliability", "Better operational control"],
+  },
+  {
+    slug: "data-science",
+    title: "Data Science",
+    icon: LineChart,
+    summary:
+      "Data science services that turn complex datasets into decision-ready insights and predictive models.",
+    intro:
+      "Our teams support analytics, forecasting, experimentation, and insight generation programs that help organizations make better product and operational decisions.",
+    highlights: ["Predictive analytics", "Insight models", "Decision support"],
+    features: [
+      "Exploratory analysis and business insight modeling",
+      "Forecasting, experimentation, and statistical evaluation",
+      "Data storytelling aligned to operational and leadership decisions",
+    ],
+    outcomes: ["Clearer decisions", "Better forecasting accuracy", "More actionable insights"],
+  },
+  {
     slug: "professional-services",
     title: "Professional Services",
     icon: Briefcase,
-    image:
-      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=2400&q=85",
     summary:
       "Technology consulting and staffing models structured around business delivery needs.",
     intro:
@@ -370,6 +425,66 @@ const serviceDetails = {
     technologies: ["Azure", "Microsoft 365", "Power Platform", "Dynamics 365", "SharePoint", "Active Directory", "Teams", "DevOps"],
     ctaTitle: "Ready to accelerate Microsoft-led modernization?",
   },
+  cybersecurity: {
+    heroTitle: "Cybersecurity Services",
+    overview:
+      "Protect critical platforms with cybersecurity services that strengthen applications, cloud environments, identities, and operational controls.",
+    capabilities: [
+      "Security posture assessments and remediation planning",
+      "Identity, access, and endpoint security design",
+      "Threat monitoring and incident response support",
+      "Cloud security controls and governance",
+      "Policy alignment for audit and compliance readiness",
+    ],
+    benefits: [
+      "Reduced operational security risk",
+      "Stronger protection across platforms",
+      "Improved compliance preparedness",
+      "Better visibility into vulnerabilities and threats",
+    ],
+    technologies: ["Microsoft Defender", "CrowdStrike", "Okta", "AWS Security Hub", "Azure Sentinel", "Splunk", "SIEM", "IAM"],
+    ctaTitle: "Ready to strengthen enterprise security posture?",
+  },
+  "ai-mlops": {
+    heroTitle: "AI and MLOps Services",
+    overview:
+      "Operationalize AI initiatives with MLOps practices that support scalable deployment, monitoring, governance, and measurable business impact.",
+    capabilities: [
+      "Model training, deployment, and release workflows",
+      "Feature engineering and inference pipeline design",
+      "Monitoring for drift, performance, and reliability",
+      "Governance for reproducibility and responsible AI delivery",
+      "Platform integration across data and cloud environments",
+    ],
+    benefits: [
+      "Faster transition from pilot to production",
+      "Higher confidence in model performance",
+      "Better observability and governance",
+      "More scalable AI delivery operations",
+    ],
+    technologies: ["Python", "MLflow", "Kubeflow", "Docker", "Kubernetes", "Databricks", "AWS SageMaker", "Azure ML"],
+    ctaTitle: "Ready to operationalize AI at enterprise scale?",
+  },
+  "data-science": {
+    heroTitle: "Data Science Services",
+    overview:
+      "Use data science to uncover insights, improve forecasting, and build analytical models that support product, operational, and business decisions.",
+    capabilities: [
+      "Exploratory data analysis and pattern discovery",
+      "Forecasting, experimentation, and statistical modeling",
+      "Predictive modeling for business and product use cases",
+      "Data storytelling and decision-support dashboards",
+      "Analytical frameworks aligned to operational KPIs",
+    ],
+    benefits: [
+      "More actionable business insight",
+      "Improved planning and forecasting quality",
+      "Stronger decision support for leaders",
+      "Better use of enterprise data assets",
+    ],
+    technologies: ["Python", "Pandas", "NumPy", "scikit-learn", "Jupyter", "SQL", "Power BI", "Tableau"],
+    ctaTitle: "Ready to turn enterprise data into insight?",
+  },
   "professional-services": {
     heroTitle: "Professional Services",
     overview:
@@ -394,14 +509,15 @@ const serviceDetails = {
 
 export const serviceItems = baseServiceItems.map((service) => ({
   ...service,
+  image: serviceImageMap[service.slug],
   ...serviceDetails[service.slug],
 }));
 
 export const homeStats = [
-  { value: "2016", label: "Established with a long-term enterprise delivery mindset" },
-  { value: "9+", label: "Core service lines across engineering and consulting" },
-  { value: "39+", label: "Client engagements supported across multiple industries" },
-  { value: "4", label: "Operating locations supporting talent and delivery programs" },
+  { value: "10+", label: "Service Lines" },
+  { value: "100+", label: "Client Engagements" },
+  { value: "10+", label: "Locations" },
+  { value: "50+", label: "Projects Delivered" },
 ];
 
 export const featureItems = [
@@ -498,6 +614,8 @@ export const whyJoinUs = [
     icon: Briefcase,
   },
 ];
+
+export const productCatalog = products;
 
 export const footerSections = {
   company: [

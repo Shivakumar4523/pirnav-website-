@@ -1,4 +1,3 @@
-import CTASection from "../../components/common/CTASection";
 import SectionWrapper from "../../components/common/SectionWrapper";
 import ServiceContent from "../../components/common/ServiceContent";
 import ServiceHero from "../../components/common/ServiceHero";
@@ -34,7 +33,6 @@ const Application = () => {
         <TechnologyGrid items={service.technologies || []} />
       </SectionWrapper>
 
-      <CTASection className="internal-page-cta" eyebrow="Start a Conversation" title={service.ctaTitle || `Talk to Pirnav about ${service.title.toLowerCase()}.`} description="We help enterprise teams plan, build, modernize, and support technology platforms with a practical consulting-led delivery model." primaryAction={{ label: "Start a Conversation", to: "/contact" }} secondaryAction={{ label: "All Services", to: "/services" }} />
     </div>
   );
 };

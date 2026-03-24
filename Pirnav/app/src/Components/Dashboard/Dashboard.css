@@ -1,0 +1,200 @@
+.homepage-products-section .section-heading {
+  width: 100%;
+  max-width: none;
+  padding: 22px 26px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.homepage-products-section .section-heading h2 {
+  margin-top: 14px;
+  font-size: clamp(2.125rem, 2.8vw, 2.375rem);
+  line-height: 1.14;
+}
+
+.homepage-products-section .section-heading p {
+  margin-top: 12px;
+  max-width: 860px;
+  font-size: 0.92rem;
+  line-height: 1.62;
+}
+
+.homepage-products-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  align-items: stretch;
+}
+
+.homepage-products-card {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  isolation: isolate;
+  --homepage-products-glow-x: 50%;
+  --homepage-products-glow-y: 50%;
+  --homepage-products-glow-opacity: 0;
+  height: 100%;
+  padding: 0;
+  overflow: visible;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 18px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+  transition:
+    border-color 220ms ease-out,
+    box-shadow 220ms ease-out,
+    background 220ms ease-out;
+}
+
+.homepage-products-card::before {
+  content: "";
+  position: absolute;
+  inset: -22px;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 12% 52%, rgba(45, 212, 191, 0.32), transparent 34%),
+    radial-gradient(circle at 58% 8%, rgba(96, 165, 250, 0.26), transparent 38%),
+    radial-gradient(circle at 88% 88%, rgba(167, 139, 250, 0.3), transparent 34%);
+  border-radius: 30px;
+  filter: blur(24px);
+  transition: opacity 220ms ease-out;
+}
+
+.homepage-products-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--homepage-products-glow-opacity);
+  background:
+    radial-gradient(
+      240px circle at var(--homepage-products-glow-x) var(--homepage-products-glow-y),
+      rgba(255, 255, 255, 0.38) 0%,
+      rgba(219, 234, 254, 0.22) 22%,
+      rgba(147, 197, 253, 0.12) 38%,
+      rgba(37, 99, 235, 0.04) 54%,
+      transparent 68%
+    );
+  transition: opacity 220ms ease-out;
+}
+
+.homepage-products-card:hover {
+  background: #f6f8fc !important;
+  border-color: rgba(96, 165, 250, 0.34) !important;
+  box-shadow:
+    0 18px 36px rgba(15, 23, 42, 0.1),
+    -18px 18px 34px rgba(45, 212, 191, 0.12),
+    0 0 26px rgba(96, 165, 250, 0.14),
+    16px 18px 36px rgba(167, 139, 250, 0.14);
+}
+
+.homepage-products-card:hover::before {
+  opacity: 1;
+}
+
+.homepage-products-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.homepage-products-card-media {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+  border-radius: 18px 18px 0 0;
+}
+
+.homepage-products-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.homepage-products-card-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 22px 22px;
+}
+
+.homepage-products-card-copy {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0;
+}
+
+.homepage-products-card-label {
+  margin: 0;
+  color: #2563eb;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.homepage-products-card h3 {
+  margin: 12px 0 0;
+  font-size: clamp(1.125rem, 1.5vw, 1.25rem);
+  line-height: 1.35;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.homepage-products-card-copy > p:last-child {
+  margin: 10px 0 0;
+  font-size: 0.94rem;
+  line-height: 1.65;
+  color: #475569;
+}
+
+.homepage-products-card-actions {
+  display: flex;
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+.homepage-products-card-action {
+  width: fit-content;
+}
+
+@media (max-width: 992px) {
+  .homepage-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .homepage-products-section .section-heading {
+    padding: 18px;
+    margin-bottom: 20px;
+  }
+
+  .homepage-products-section .section-heading h2 {
+    font-size: clamp(2rem, 8vw, 2.2rem);
+  }
+
+  .homepage-products-section .section-heading p,
+  .homepage-products-card-copy > p:last-child {
+    font-size: 0.92rem;
+  }
+
+  .homepage-products-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .homepage-products-card-media {
+    height: 210px;
+  }
+
+  .homepage-products-card-body {
+    padding: 18px;
+  }
+}

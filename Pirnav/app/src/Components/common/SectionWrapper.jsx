@@ -13,7 +13,7 @@ const SectionWrapper = ({
   const ref = useRevealOnScroll();
 
   return (
-    <section id={id} className={`section-block ${className}`.trim()}>
+    <section id={id} className={`section-block section-wrapper ${className}`.trim()}>
       <div ref={ref} className="section-shell reveal">
         {(eyebrow || title || description) && (
           <div className={`section-heading section-heading-${align}`}>

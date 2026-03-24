@@ -1,15 +1,61 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { ChevronDown, Mail, MapPin, Phone } from "lucide-react";
 import SectionWrapper from "../../components/common/SectionWrapper";
-import CTASection from "../../components/common/CTASection";
-import { company } from "../../data/siteContent";
+
+const locationGroups = [
+  {
+    country: "India",
+    cities: ["Hyderabad", "Bangalore", "Mumbai", "Delhi", "Chennai"],
+  },
+  {
+    country: "USA",
+    cities: ["New York", "San Francisco", "Dallas"],
+  },
+  {
+    country: "UK",
+    cities: ["London", "Manchester"],
+  },
+];
+
+const contactMethods = [
+  {
+    label: "Locations",
+    groups: locationGroups,
+    href: null,
+    icon: MapPin,
+  },
+  {
+    label: "Phone",
+    value: "040-35339312",
+    href: "tel:04035339312",
+    icon: Phone,
+  },
+  {
+    label: "Email",
+    value: "contact@pirnav.com",
+    href: "mailto:contact@pirnav.com",
+    icon: Mail,
+  },
+];
+
+const contactInfoImage =
+  "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=2400&q=90";
+
+const purposeOptions = [
+  "Business Inquiry",
+  "Career Opportunities",
+  "Customer Support",
+  "Partner Alliance",
+  "Sell to Pirnav",
+  "Others",
+];
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    subject: "",
+    purposeOfContact: "",
     message: "",
   });
   const [loading, setLoading] = useState(false);
@@ -24,8 +70,10 @@ const ContactUs = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
     setStatus("");
+
+    setLoading(true);
+    const selectedPurpose = formData.purposeOfContact;
 
     try {
       const response = await fetch(
@@ -33,7 +81,12 @@ const ContactUs = () => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({
+            ...formData,
+            name: formData.name.trim(),
+            purposeOfContact: selectedPurpose,
+            subject: selectedPurpose,
+          }),
         }
       );
 
@@ -43,7 +96,12 @@ const ContactUs = () => {
 
       await response.json();
       setStatus("success");
-      setFormData({ name: "", email: "", subject: "", message: "" });
+      setFormData({
+        name: "",
+        email: "",
+        purposeOfContact: "",
+        message: "",
+      });
     } catch {
       setStatus("error");
     } finally {
@@ -51,44 +109,18 @@ const ContactUs = () => {
     }
   };
 
-  const cards = [
-    {
-      title: "Phone",
-      value: company.phone,
-      link: `tel:${company.phone}`,
-      icon: Phone,
-    },
-    {
-      title: "Email",
-      value: company.email,
-      link: `mailto:${company.email}`,
-      icon: Mail,
-    },
-    {
-      title: "Location",
-      value: company.location,
-      link: null,
-      icon: MapPin,
-    },
-  ];
-
   return (
     <div className="page-shell">
       <section
-        className="page-banner page-banner-light"
+        className="hero-section page-banner page-banner-left page-banner-light"
         style={{
           "--banner-image":
             "url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2400&q=85')",
         }}
       >
-        <div className="section-shell page-banner-content">
-          <span className="section-eyebrow section-eyebrow-light">Contact</span>
+        <div className="section-shell page-banner-content page-banner-left-content">
+          <span className="hero-badge">Contact</span>
           <h1>Start a conversation with Pirnav.</h1>
-          <div className="breadcrumb-row">
-            <Link to="/">Home</Link>
-            <span>/</span>
-            <span>Contact</span>
-          </div>
           <p>
             Use the contact form for project discussions, staffing requirements,
             or partnership inquiries.
@@ -96,98 +128,174 @@ const ContactUs = () => {
         </div>
       </section>
 
-      <SectionWrapper
-        eyebrow="Contact Details"
-        title="Direct information, cleaner layout, and a stronger first-contact experience."
-        description="The contact page now uses consistent cards, clear hierarchy, and a SaaS-style split layout for the form and map."
-      >
-        <div className="contact-info-grid">
-          {cards.map((card) => {
-            const Icon = card.icon;
+      <SectionWrapper className="section-surface-white contact-split-section">
+        <div className="contact-layout contact-split-layout">
+          <article className="contact-form-card contact-panel contact-form-panel">
+            <div className="contact-panel-head">
+              <span className="section-eyebrow">Get In Touch</span>
+              <h2>Get in Touch</h2>
+              <p>
+                Share a quick note about your project, hiring needs, or support goals
+                and the right Pirnav team will follow up.
+              </p>
+            </div>
 
-            return (
-              <article key={card.title} className="contact-card">
-                <div className="feature-icon">
-                  <Icon size={22} />
-                </div>
-                <h3>{card.title}</h3>
-                {card.link ? <a href={card.link}>{card.value}</a> : <p>{card.value}</p>}
-              </article>
-            );
-          })}
-        </div>
-      </SectionWrapper>
-
-      <SectionWrapper
-        eyebrow="Get In Touch"
-        title="Tell us what you’re building or where you need support."
-      >
-        <div className="contact-layout">
-          <article className="contact-form-card">
             <form onSubmit={handleSubmit}>
-              <div className="form-row">
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Your name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Work email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
               <input
                 type="text"
-                name="subject"
-                placeholder="Subject"
-                value={formData.subject}
+                name="name"
+                placeholder="Your name"
+                value={formData.name}
                 onChange={handleChange}
                 required
               />
+              <input
+                type="email"
+                name="email"
+                placeholder="Work email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+              <div className="contact-select-shell">
+                <select
+                  name="purposeOfContact"
+                  value={formData.purposeOfContact}
+                  onChange={handleChange}
+                  className="contact-purpose-select"
+                  required
+                >
+                  <option value="" disabled>
+                    Purpose of Contact
+                  </option>
+                  {purposeOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+                <span className="contact-select-icon" aria-hidden="true">
+                  <ChevronDown size={18} />
+                </span>
+              </div>
               <textarea
                 name="message"
-                placeholder="Tell us about your project, hiring need, or support requirement."
+                placeholder="Tell us about your project, team needs, or support requirement."
                 value={formData.message}
                 onChange={handleChange}
                 required
               />
-              <button type="submit" className="button button-primary button-md" disabled={loading}>
+              <button
+                type="submit"
+                className="button button-primary button-md contact-submit"
+                disabled={loading}
+              >
                 {loading ? "Sending..." : "Send Message"}
               </button>
               {status === "success" && (
-                <div className="status-message status-success">Message sent successfully.</div>
+                <div className="status-message status-success">
+                  Message sent successfully.
+                </div>
               )}
               {status === "error" && (
-                <div className="status-message status-error">Something went wrong. Try again.</div>
+                <div className="status-message status-error">
+                  Something went wrong. Try again.
+                </div>
               )}
             </form>
           </article>
 
-          <iframe
-            title="Pirnav location map"
-            className="map-frame"
-            src="https://www.google.com/maps?q=Madhapur,Hyderabad&output=embed"
-            loading="lazy"
-            allowFullScreen=""
-          />
+          <aside className="contact-panel contact-map-panel">
+            <div className="contact-info-hero">
+              <img
+                src={contactInfoImage}
+                alt="Pirnav collaboration workspace"
+                loading="lazy"
+              />
+              <div className="contact-info-hero-copy">
+                <span className="section-eyebrow">Contact Information</span>
+                <h2>Contact Information</h2>
+                <p>
+                  Reach Pirnav for delivery planning, platform modernization, or
+                  long-term engineering support.
+                </p>
+              </div>
+            </div>
+
+            <div className="contact-panel-section">
+              <div className="contact-info-list">
+                {contactMethods.map((method) => {
+                  const Icon = method.icon;
+                  const content = (
+                    <>
+                      <span className="contact-info-icon">
+                        <Icon size={18} />
+                      </span>
+                      <div className="contact-info-copy">
+                        <strong className="contact-info-label">{method.label}</strong>
+                        {method.groups ? (
+                          <div className="contact-location-groups">
+                            {method.groups.map((group) => (
+                              <div key={group.country} className="contact-location-line">
+                                <span className="contact-location-country">
+                                  {group.country}:
+                                </span>
+                                <span className="contact-location-inline">
+                                  {group.cities.map((city) => (
+                                    <span key={city} className="contact-location-city">
+                                      {city}
+                                    </span>
+                                  ))}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className="contact-info-value">{method.value}</span>
+                        )}
+                      </div>
+                    </>
+                  );
+
+                  return method.href ? (
+                    <a
+                      key={method.label}
+                      href={method.href}
+                      className={`contact-info-item${
+                        method.groups
+                          ? " contact-info-item-locations"
+                          : " contact-info-item-compact"
+                      }`}
+                    >
+                      {content}
+                    </a>
+                  ) : (
+                    <div
+                      key={method.label}
+                      className={`contact-info-item${
+                        method.groups
+                          ? " contact-info-item-locations"
+                          : " contact-info-item-compact"
+                      }`}
+                    >
+                      {content}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="contact-panel-cta-shell">
+              <Link
+                to="/services"
+                className="button button-primary button-md contact-panel-cta"
+              >
+                View Services
+              </Link>
+            </div>
+          </aside>
         </div>
       </SectionWrapper>
-
-      <CTASection
-        className="internal-page-cta"
-        eyebrow="Next Step"
-        title="Need a faster path to engineering capacity or enterprise software delivery?"
-        description="Contact the team and we can discuss software services, QA automation, support, or staffing requirements."
-        primaryAction={{ label: "View Services", to: "/services" }}
-        secondaryAction={{ label: "Careers", to: "/careers" }}
-      />
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import CTASection from "../../components/common/CTASection";
 
 const BASE_URL = "https://farrandly-interalar-talon.ngrok-free.dev/api";
 
@@ -70,11 +69,22 @@ const JobDetails = () => {
     setLoading(true);
     setSuccessMessage("");
     setErrorMessage("");
+    const linkedInUrl = formData.linkedin.trim();
 
     if (!formData.resume) {
       setErrorMessage("Please upload your resume.");
       setLoading(false);
       return;
+    }
+
+    if (linkedInUrl) {
+      try {
+        new URL(linkedInUrl);
+      } catch {
+        setErrorMessage("Please enter a valid LinkedIn URL.");
+        setLoading(false);
+        return;
+      }
     }
 
     const form = new FormData();
@@ -91,7 +101,9 @@ const JobDetails = () => {
     form.append("ExpectedCTC", formData.expectedCTC);
     form.append("NoticePeriod", formData.noticePeriod);
     form.append("CurrentLocation", formData.location);
-    form.append("LinkedInUrl", formData.linkedin);
+    if (linkedInUrl) {
+      form.append("LinkedInUrl", linkedInUrl);
+    }
     form.append("Resume", formData.resume);
 
     try {
@@ -123,14 +135,14 @@ const JobDetails = () => {
   return (
     <div className="page-shell">
       <section
-        className="page-banner page-banner-light"
+        className="hero-section page-banner page-banner-light"
         style={{
           "--banner-image":
             "url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=2400&q=85')",
         }}
       >
         <div className="section-shell page-banner-content">
-          <span className="section-eyebrow section-eyebrow-light">Career Opportunity</span>
+          <span className="hero-badge">Career Opportunity</span>
           <h1>{job.jobTitle}</h1>
           <div className="breadcrumb-row">
             <Link to="/">Home</Link>
@@ -246,8 +258,8 @@ const JobDetails = () => {
 
               <div className="form-row">
                 <div>
-                  <label>LinkedIn *</label>
-                  <input type="url" name="linkedin" value={formData.linkedin} onChange={handleChange} required />
+                  <label>LinkedIn (optional)</label>
+                  <input type="url" name="linkedin" value={formData.linkedin} onChange={handleChange} />
                 </div>
                 <div>
                   <label>Upload resume *</label>
@@ -274,7 +286,7 @@ const JobDetails = () => {
             <article className="service-outline-card">
               <h3>Before you apply</h3>
               <p>
-                Keep your resume file under 5MB and include a valid LinkedIn URL.
+                Keep your resume file under 5MB. If you add LinkedIn, use a valid URL.
                 The redesigned application form keeps the page clearer and easier to complete.
               </p>
             </article>
@@ -282,13 +294,6 @@ const JobDetails = () => {
         </div>
       </section>
 
-      <CTASection
-        eyebrow="More Roles"
-        title="Looking for other openings or want to learn more about the company first?"
-        description="The careers flow now matches the rest of the public website visually and structurally."
-        primaryAction={{ label: "Back To Careers", to: "/careers" }}
-        secondaryAction={{ label: "About Pirnav", to: "/about" }}
-      />
     </div>
   );
 };

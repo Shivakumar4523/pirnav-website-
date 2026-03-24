@@ -1,241 +1,237 @@
-import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Briefcase, Building2, CheckCircle2, Cloud, Database, MonitorSmartphone, ShieldCheck, Users, Workflow } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import Button from "../../components/common/Button";
-import CTASection from "../../components/common/CTASection";
 import SectionWrapper from "../../components/common/SectionWrapper";
 import StatsSection from "../../components/common/StatsSection";
+import TechnologyMarquee from "../../components/common/TechnologyMarquee";
+import { productCatalog, serviceItems } from "../../data/siteContent";
+import "./Dashboard.css";
 
 const slides = [
   {
-    tag: "Enterprise Technology Consulting",
-    title: "Engineering scalable software platforms.",
-    description:
-      "We help enterprises modernize technology, accelerate delivery, and scale digital products with reliable engineering support.",
-    image:
-      "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=2200&q=80",
+    id: "engineering-platforms",
+    heading: "Engineering scalable software platforms",
+    description: "We help enterprises modernize and scale digital products.",
   },
   {
-    tag: "Cloud and Platform Modernization",
-    title: "Cloud and data solutions for modern businesses.",
-    description:
-      "Deliver reliable infrastructure, stronger platform operations, and intelligent platforms built for sustainable growth.",
-    image:
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=2000&q=80",
+    id: "cloud-data",
+    heading: "Cloud and data solutions for modern businesses",
+    description: "Build resilient infrastructure and unlock data-driven decisions.",
   },
   {
-    tag: "Consulting Led Delivery",
-    title: "Consulting and engineering teams that deliver results.",
-    description:
-      "Partner with experienced engineers building enterprise solutions with execution discipline and measurable outcomes.",
-    image:
-      "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=2000&q=80",
+    id: "digital-experience",
+    heading: "Transform your digital experience",
+    description: "Deliver seamless web and mobile applications at scale.",
   },
   {
-    tag: "Cloud Operations and Insights",
-    title: "Cloud infrastructure visibility for resilient delivery.",
-    description:
-      "Strengthen platform operations with clearer infrastructure insight, better monitoring, and scalable cloud foundations.",
-    image:
-      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=2000&q=80",
-  },
-];
-
-const services = [
-  {
-    icon: MonitorSmartphone,
-    title: "Software Engineering",
-    description:
-      "Build reliable digital products and modernize applications across enterprise web, mobile, and platform ecosystems.",
-  },
-  {
-    icon: Cloud,
-    title: "Cloud Engineering",
-    description:
-      "Design resilient cloud environments, streamline migration programs, and improve operational scalability.",
-  },
-  {
-    icon: Database,
-    title: "Data & AI",
-    description:
-      "Create data foundations that improve reporting, analytics, and decision-making across the business.",
-  },
-  {
-    icon: Building2,
-    title: "Enterprise Applications",
-    description:
-      "Support core enterprise platforms with implementation, integration, enhancement, and long-term optimization.",
-  },
-  {
-    icon: Briefcase,
-    title: "Technology Consulting",
-    description:
-      "Align technology planning, staffing, and program execution around measurable business priorities.",
-  },
-  {
-    icon: Workflow,
-    title: "Digital Transformation",
-    description:
-      "Guide modernization initiatives with a practical consulting-led delivery model for complex organizations.",
+    id: "consulting-outcomes",
+    heading: "Consulting that drives real outcomes",
+    description: "Align technology with business goals for measurable impact.",
   },
 ];
 
 const heroStats = [
-  { value: "9+", label: "Service Lines" },
-  { value: "39+", label: "Client Engagements" },
-  { value: "4", label: "Global Delivery Locations" },
-];
-
-const strengths = [
-  {
-    title: "Enterprise engineering expertise",
-  },
-  {
-    title: "Scalable delivery teams",
-  },
-  {
-    title: "Cloud and data specialization",
-  },
-  {
-    title: "Proven consulting-led delivery model",
-  },
+  { value: "10+", label: "Service Lines" },
+  { value: "100+", label: "Client Engagements" },
+  { value: "10+", label: "Locations" },
 ];
 
 const Dashboard = () => {
   const [activeSlide, setActiveSlide] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const heroCardRef = useRef(null);
+  const [activeServiceIndex, setActiveServiceIndex] = useState(0);
+  const servicesViewportRef = useRef(null);
+  const servicesTrackRef = useRef(null);
+  const carouselMetricsRef = useRef({ step: 0 });
+  const totalSlides = slides.length;
 
   useEffect(() => {
-    if (isPaused) return undefined;
-
     const timer = window.setInterval(() => {
-      setActiveSlide((current) => (current + 1) % slides.length);
-    }, 5000);
+      setActiveSlide((current) => (current + 1) % totalSlides);
+    }, 4000);
 
     return () => window.clearInterval(timer);
-  }, [isPaused]);
+  }, [totalSlides]);
+
+  const syncActiveService = useCallback(() => {
+    const viewport = servicesViewportRef.current;
+    const track = servicesTrackRef.current;
+    if (!viewport || !track) return;
+
+    const cards = Array.from(track.querySelectorAll(".services-carousel-card"));
+    if (cards.length === 0) return;
+
+    const viewportCenter = viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
+    let nextActiveIndex = 0;
+    let closestDistance = Number.POSITIVE_INFINITY;
+
+    cards.forEach((card, index) => {
+      const cardRect = card.getBoundingClientRect();
+      const cardCenter = cardRect.left + cardRect.width / 2;
+      const distance = Math.abs(cardCenter - viewportCenter);
+
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        nextActiveIndex = index;
+      }
+    });
+
+    setActiveServiceIndex((currentIndex) =>
+      currentIndex === nextActiveIndex ? currentIndex : nextActiveIndex
+    );
+  }, []);
+
+  const updateCarouselMetrics = useCallback(() => {
+    const track = servicesTrackRef.current;
+    if (!track) return;
+
+    const card = track.querySelector(".services-carousel-card");
+    if (!card) return;
+
+    const styles = window.getComputedStyle(track);
+    const gapValue = parseFloat(styles.columnGap || styles.gap || "0");
+    const cardWidth = card.getBoundingClientRect().width;
+
+    carouselMetricsRef.current = {
+      step: cardWidth + gapValue,
+    };
+
+    syncActiveService();
+  }, [syncActiveService]);
+
+  const scrollServicesBy = useCallback(
+    (direction) => {
+      const viewport = servicesViewportRef.current;
+      const { step } = carouselMetricsRef.current;
+      if (!viewport || !step) return;
+
+      const maxScrollLeft = Math.max(viewport.scrollWidth - viewport.clientWidth, 0);
+      const nextScrollLeft = Math.min(
+        Math.max(viewport.scrollLeft + direction * step, 0),
+        maxScrollLeft
+      );
+
+      viewport.scrollTo({
+        left: nextScrollLeft,
+        behavior: "smooth",
+      });
+    },
+    []
+  );
 
   useEffect(() => {
-    const heroCard = heroCardRef.current;
+    const viewport = servicesViewportRef.current;
+    if (!viewport) return undefined;
 
-    if (!heroCard) return undefined;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+    let scrollFrameId = 0;
+    let setupFrameId = window.requestAnimationFrame(() => {
+      setupFrameId = 0;
+      updateCarouselMetrics();
+    });
 
-    let frameId = null;
-
-    const handleMove = (event) => {
-      const rect = heroCard.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      const rotateX = (y - centerY) / 35;
-      const rotateY = (centerX - x) / 35;
-
-      if (frameId) {
-        cancelAnimationFrame(frameId);
+    const handleScroll = () => {
+      if (scrollFrameId) {
+        window.cancelAnimationFrame(scrollFrameId);
       }
 
-      frameId = requestAnimationFrame(() => {
-        heroCard.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+      scrollFrameId = window.requestAnimationFrame(() => {
+        scrollFrameId = 0;
+        syncActiveService();
       });
     };
 
-    const handleLeave = () => {
-      if (frameId) {
-        cancelAnimationFrame(frameId);
-        frameId = null;
-      }
-      heroCard.style.transform = "perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+    const handleResize = () => {
+      updateCarouselMetrics();
     };
 
-    heroCard.addEventListener("mousemove", handleMove);
-    heroCard.addEventListener("mouseleave", handleLeave);
+    viewport.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      if (frameId) {
-        cancelAnimationFrame(frameId);
+      if (setupFrameId) {
+        window.cancelAnimationFrame(setupFrameId);
       }
-      heroCard.removeEventListener("mousemove", handleMove);
-      heroCard.removeEventListener("mouseleave", handleLeave);
+
+      if (scrollFrameId) {
+        window.cancelAnimationFrame(scrollFrameId);
+      }
+
+      viewport.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
     };
+  }, [syncActiveService, updateCarouselMetrics]);
+
+  const handleProductCardPointerEnter = useCallback((event) => {
+    event.currentTarget.style.setProperty("--homepage-products-glow-opacity", "1");
+  }, []);
+
+  const handleProductCardPointerMove = useCallback((event) => {
+    const card = event.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    card.style.setProperty("--homepage-products-glow-x", `${x}px`);
+    card.style.setProperty("--homepage-products-glow-y", `${y}px`);
+    card.style.setProperty("--homepage-products-glow-opacity", "1");
+  }, []);
+
+  const handleProductCardPointerLeave = useCallback((event) => {
+    event.currentTarget.style.setProperty("--homepage-products-glow-opacity", "0");
   }, []);
 
   return (
     <div className="page-shell">
-      <section className="hero hero-section homepage-hero">
-        <div className="hero-card" ref={heroCardRef}>
-          <div
-            className="section-shell hero-slider homepage-hero-shell"
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
-          >
-            <div className="slider-container">
-              {slides.map((slide, index) => {
-                const isActive = index === activeSlide;
-
-                return (
-                  <article
-                    key={slide.title}
-                    className={`hero-slide ${isActive ? "hero-slide-active" : ""}`}
-                    aria-hidden={!isActive}
-                  >
-                    <img
-                      src={slide.image}
-                      alt=""
-                      aria-hidden="true"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <div className="hero-slide-copy homepage-hero-copy hero-content">
-                      {isActive && (
-                        <>
-                          <span className="section-eyebrow">{slide.tag}</span>
-                          <h1>{slide.title}</h1>
-                          <p>{slide.description}</p>
-                          <div className="hero-actions hero-buttons">
-                            <Button to="/services">
-                              Explore Services
-                              <ArrowRight size={18} />
-                            </Button>
-                            <Button to="/contact" variant="secondary">
-                              Contact Us
-                            </Button>
-                          </div>
-                        </>
-                      )}
-                    </div>
-
-                    <div className="hero-slide-spacer" aria-hidden="true" />
-                  </article>
-                );
-              })}
+      <section className="hero-section homepage-hero">
+        <div className="hero-slider">
+          {slides.map((slide, index) => (
+            <div
+              key={slide.id}
+              className={`slide${index === activeSlide ? " active" : ""}`}
+              aria-hidden={index !== activeSlide}
+            >
+              <div className="hero-content">
+                <h1>{slide.heading}</h1>
+                <p>{slide.description}</p>
+                <div className="hero-actions hero-buttons">
+                  <Button to="/services">
+                    Explore Services
+                    <ArrowRight size={18} />
+                  </Button>
+                  <Button to="/contact" variant="secondary">
+                    Contact Us
+                  </Button>
+                </div>
+              </div>
             </div>
+          ))}
+        </div>
 
-            <div className="hero-slider-dots slider-dots" aria-label="Hero slide navigation">
-              {slides.map((slide, index) => (
-                <button
-                  key={slide.title}
-                  type="button"
-                  className={`hero-slider-dot ${index === activeSlide ? "hero-slider-dot-active" : ""}`}
-                  onClick={() => setActiveSlide(index)}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
-            </div>
-          </div>
+        <div className="hero-dots" aria-label="Hero slide navigation">
+          {slides.map((_, index) => (
+            <button
+              key={`dot-${index}`}
+              type="button"
+              className={`dot${index === activeSlide ? " active" : ""}`}
+              onClick={() => setActiveSlide(index)}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
         </div>
       </section>
 
       <section className="executive-section">
         <div className="container">
-          <div className="executive-grid">
-            <div className="executive-left">
-              <h2>Executive summary about Pirnav Software Solutions</h2>
+          <div className="executive-card">
+            <div className="executive-card-left">
+              <span className="executive-accent" aria-hidden="true" />
+              <div>
+                <h2>Executive Summary</h2>
+                <p className="executive-subtitle">Pirnav Software Solutions</p>
+              </div>
             </div>
 
-            <div className="executive-right">
+            <div className="executive-card-right">
               <p>
                 Pirnav Software Solutions provides on-demand tech resources to fuel your
                 projects, both short-term and long-term. Our team of seasoned professionals
@@ -243,8 +239,8 @@ const Dashboard = () => {
                 workflow, delivering the expertise you need, when you need it.
               </p>
 
-              <Link to="/about" className="primary-btn">
-                Pirnav Software Solutions
+              <Link to="/about" className="primary-btn executive-cta">
+                Learn More
               </Link>
             </div>
           </div>
@@ -254,98 +250,140 @@ const Dashboard = () => {
       <StatsSection items={heroStats} className="homepage-stats section-surface-muted" />
 
       <SectionWrapper
-        className="section-surface-white"
-        eyebrow="Services"
-        title="Core services for enterprise software, platforms, and transformation programs."
-        description="The homepage is focused on essential consulting capabilities and a cleaner enterprise technology narrative."
+        className="section-surface-white homepage-technologies-section"
+        // title="Technologies with us"
       >
-        <div className="enterprise-services-grid">
-          {services.map((service, index) => {
-            const Icon = service.icon;
-
-            return (
-              <article
-                key={service.title}
-                className="enterprise-service-card reveal"
-                style={{ transitionDelay: `${index * 70}ms` }}
-              >
-                <div className="feature-icon">
-                  <Icon size={22} />
-                </div>
-                <h3>{service.title}</h3>
-                <p>{service.description}</p>
-              </article>
-            );
-          })}
-        </div>
+        <TechnologyMarquee />
       </SectionWrapper>
 
-      <SectionWrapper
-        className="section-surface-muted"
-        eyebrow="Why Choose Us"
-        title="Why companies work with us."
-        description="We combine consulting discipline, engineering depth, and delivery accountability to help organizations modernize technology without unnecessary complexity."
-      >
-        <div className="homepage-why-layout service-section">
-          <div className="homepage-why-copy">
-            <p className="homepage-why-intro">
-              Our teams support modernization programs across software platforms,
-              cloud environments, enterprise applications, and data ecosystems with a
-              delivery model designed for measurable outcomes.
-            </p>
-            <div className="homepage-why-list">
-              {strengths.map((item, index) => (
-                <article
-                  key={item.title}
-                  className="homepage-why-item reveal"
-                  style={{ transitionDelay: `${index * 70}ms` }}
-                >
-                  <CheckCircle2 size={20} />
-                  <span>{item.title}</span>
-                </article>
-              ))}
-            </div>
-            <div className="hero-actions homepage-why-actions">
-              <Button to="/about" variant="secondary">
-                Learn More
-              </Button>
-              <Button to="/contact">Talk to Our Team</Button>
-            </div>
-          </div>
+      <section className="services-carousel-section">
+        <div className="container">
+          <div className="services-carousel-wrapper">
+            <button
+              type="button"
+              className="carousel-arrow left"
+              onClick={() => scrollServicesBy(-1)}
+              aria-label="Scroll services left"
+            >
+              <span aria-hidden="true">&larr;</span>
+            </button>
 
-          <div className="homepage-why-media service-image-card">
-            <img
-              src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2400&q=90"
-              alt="Enterprise office with modern technology workstations"
-              loading="lazy"
-            />
+            <div className="services-carousel" ref={servicesViewportRef}>
+              <div className="carousel-track" ref={servicesTrackRef}>
+                {serviceItems.map((service, index) => (
+                  <article
+                    className={`services-carousel-card${
+                      index === activeServiceIndex ? " is-active" : ""
+                    }`}
+                    key={service.slug || index}
+                  >
+                    <div className="services-carousel-card-inner">
+                      <div className="services-carousel-icon">
+                        {service.icon && <service.icon size={22} />}
+                      </div>
+                      <h3>{service.title}</h3>
+                      <p>{service.summary}</p>
+                      {service.highlights && service.highlights.length > 0 && (
+                        <div className="services-carousel-tags">
+                          {service.highlights.map((highlight) => (
+                            <span key={highlight} className="services-carousel-tag">
+                              {highlight}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <Link to={`/services/${service.slug}`} className="carousel-card-button">
+                        Learn more
+                      </Link>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+
+            <button
+              type="button"
+              className="carousel-arrow right"
+              onClick={() => scrollServicesBy(1)}
+              aria-label="Scroll services right"
+            >
+              <span aria-hidden="true">&rarr;</span>
+            </button>
           </div>
         </div>
-      </SectionWrapper>
-
-      <CTASection
-        className="homepage-cta-banner"
-        eyebrow="Start a Conversation"
-        title="Ready to build scalable technology platforms?"
-        description="Partner with engineering and consulting teams focused on modernization, delivery quality, and long-term business impact."
-        primaryAction={{ to: "/contact", label: "Start a Conversation" }}
-        secondaryAction={{ to: "/services", label: "Explore Services" }}
-      />
+      </section>
 
       <SectionWrapper
-        className="section-surface-muted"
-        eyebrow="Careers"
-        title="Join our engineering teams."
-        description="Work on enterprise software, cloud modernization, and consulting-led delivery programs with teams that value quality and accountability."
+        className="section-surface-white homepage-products-section"
+        eyebrow="Products"
+        title="Scalable software products built for business operations."
+        description="Explore a snapshot of our product portfolio, designed to support people operations, accounting workflows, and digital experiences."
+        contentClassName="homepage-products-grid"
       >
-        <div className="enterprise-careers-panel">
-          <div>
-            <h3>Build your career through real delivery work and long-term technology partnerships.</h3>
+        {productCatalog.map((product, index) => {
+          const productLabel = product.cardLabel || product.title;
+          const productHeading = product.cardTitle || product.subtitle || product.title;
+
+          return (
+          <article
+            key={product.id}
+            className="story-card homepage-products-card reveal"
+            style={{ transitionDelay: `${index * 80}ms` }}
+            onPointerEnter={handleProductCardPointerEnter}
+            onPointerMove={handleProductCardPointerMove}
+            onPointerLeave={handleProductCardPointerLeave}
+          >
+            <div className="homepage-products-card-media">
+              <img src={product.image} alt={product.alt} loading="lazy" />
+            </div>
+
+            <div className="homepage-products-card-body">
+              <div className="homepage-products-card-copy">
+                <p className="homepage-products-card-label">{productLabel}</p>
+                <h3>{productHeading}</h3>
+                <p>{product.description}</p>
+              </div>
+              <div className="homepage-products-card-actions">
+                <Link to="/products" className="button button-secondary button-sm homepage-products-card-action">
+                  Explore Product
+                </Link>
+              </div>
+            </div>
+          </article>
+          );
+        })}
+      </SectionWrapper>
+
+      <SectionWrapper className="section-surface-muted homepage-why-cta">
+        <div className="why-cta-panel">
+          <div className="why-cta-copy">
+            <span className="why-cta-label">Why Choose Us</span>
+            <h2>Why customer's work with us.</h2>
             <p>
-              Explore open roles across software engineering, QA, support, and enterprise technology consulting.
+              We combine consulting discipline, engineering depth, and delivery accountability
+              to help organizations modernize technology without unnecessary complexity.
             </p>
           </div>
-          <Button to="/careers">View Open Roles</Button>
+          <div className="why-cta-actions">
+            <Button to="/contact">Talk to Our Team</Button>
+          </div>
+        </div>
+      </SectionWrapper>
+
+      <SectionWrapper className="section-surface-muted careers-cta-section">
+        <div className="enterprise-careers-panel">
+          <div className="careers-cta-copy">
+            <span className="careers-cta-label">Careers</span>
+            <h2>Join our engineering teams.</h2>
+            <p>
+              Work on enterprise software, cloud modernization, and consulting-led delivery programs
+              with teams that value quality and accountability. Explore open roles across software
+              engineering, QA, support, and enterprise technology consulting.
+            </p>
+          </div>
+          <div className="careers-cta-actions">
+            <Button to="/careers">View Open Roles</Button>
+          </div>
         </div>
       </SectionWrapper>
     </div>

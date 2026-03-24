@@ -12,7 +12,7 @@ const CTASection = ({
   const ref = useRevealOnScroll();
 
   return (
-    <section className={`section-block ${className}`.trim()}>
+    <section className={`section-block section-wrapper cta-section ${className}`.trim()}>
       <div ref={ref} className="section-shell reveal">
         <div className="cta-panel">
           <div className="cta-copy">

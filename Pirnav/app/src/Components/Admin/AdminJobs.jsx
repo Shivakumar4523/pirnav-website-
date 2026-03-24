@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./Admin.css";
+import { clearAdminToken, getAdminHeaders, getAdminToken } from "./adminAuth";
 
 const API_BASE =
   "https://farrandly-interalar-talon.ngrok-free.dev/api/Jobs";
 
 const AdminJobs = () => {
   const navigate = useNavigate();
+  const token = getAdminToken();
 
   const [jobs, setJobs] = useState([]);
   const [search, setSearch] = useState("");
@@ -30,21 +32,17 @@ const AdminJobs = () => {
   });
 
   const getHeaders = () => {
-    const token = localStorage.getItem("adminToken");
-    if (!token) {
-      navigate("/admin-login");
-      return null;
-    }
-    return {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-      "ngrok-skip-browser-warning": "true",
-    };
+    return getAdminHeaders(token);
   };
 
   useEffect(() => {
+    if (!token) {
+      navigate("/admin-login", { replace: true });
+      return;
+    }
+
     fetchJobs();
-  }, []);
+  }, [navigate, token]);
 
   const fetchJobs = async () => {
     try {
@@ -53,6 +51,11 @@ const AdminJobs = () => {
       if (!headers) return;
 
       const res = await fetch(API_BASE, { headers });
+      if (res.status === 401) {
+        clearAdminToken();
+        navigate("/admin-login", { replace: true });
+        return;
+      }
       if (!res.ok) throw new Error("Failed to fetch jobs");
 
       const data = await res.json();
@@ -80,6 +83,12 @@ const AdminJobs = () => {
         body: JSON.stringify(form),
       });
 
+      if (res.status === 401) {
+        clearAdminToken();
+        navigate("/admin-login", { replace: true });
+        return;
+      }
+
       if (!res.ok) {
         alert("Operation failed");
         return;
@@ -102,6 +111,12 @@ const AdminJobs = () => {
         method: "DELETE",
         headers,
       });
+
+      if (res.status === 401) {
+        clearAdminToken();
+        navigate("/admin-login", { replace: true });
+        return;
+      }
 
       if (!res.ok) {
         alert("Delete failed");

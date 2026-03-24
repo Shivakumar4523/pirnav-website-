@@ -1,23 +1,26 @@
 import { NavLink, useNavigate, Outlet } from "react-router-dom";
 import {
+  Bookmark,
+  CalendarDays,
+  CheckCircle2,
   LayoutDashboard,
-  Wrench,
   MessageSquare,
   Briefcase,
-  Users,
   LogOut,
   Menu,
   ShieldCheck,
 } from "lucide-react";
 import { useState } from "react";
 import "./Admin.css";
+import { clearAdminToken } from "./adminAuth";
 
 const navItems = [
   { path: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  { path: "/admin/services", label: "Services", icon: Wrench },
   { path: "/admin/messages", label: "Messages", icon: MessageSquare },
   { path: "/admin/jobs", label: "Jobs", icon: Briefcase },
-  { path: "/admin/applications", label: "Applications", icon: Users },
+  { path: "/admin/pipeline", label: "Pipeline", icon: Bookmark },
+  { path: "/admin/interviews", label: "Interviews", icon: CalendarDays },
+  { path: "/admin/selected-candidates", label: "Selected Candidates", icon: CheckCircle2 },
 ];
 
 const AdminLayout = () => {
@@ -25,8 +28,9 @@ const AdminLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleLogout = () => {
-    localStorage.clear();
-    navigate("/admin-login");
+    clearAdminToken();
+    setMobileOpen(false);
+    navigate("/admin-login", { replace: true });
   };
 
   const user = {

@@ -1,4 +1,3 @@
-import CTASection from "../../components/common/CTASection";
 import SectionWrapper from "../../components/common/SectionWrapper";
 import ServiceContent from "../../components/common/ServiceContent";
 import ServiceHero from "../../components/common/ServiceHero";
@@ -21,7 +20,6 @@ const Microsoft = () => {
       <SectionWrapper className="section-surface-muted" eyebrow="Related Technologies" title="Platforms and technologies we use in delivery." description="Technology choices are aligned to business context, integration needs, security requirements, and long-term maintainability.">
         <TechnologyGrid items={service.technologies || []} />
       </SectionWrapper>
-      <CTASection className="internal-page-cta" eyebrow="Start a Conversation" title={service.ctaTitle || `Talk to Pirnav about ${service.title.toLowerCase()}.`} description="We help enterprise teams plan, build, modernize, and support technology platforms with a practical consulting-led delivery model." primaryAction={{ label: "Start a Conversation", to: "/contact" }} secondaryAction={{ label: "All Services", to: "/services" }} />
     </div>
   );
 };

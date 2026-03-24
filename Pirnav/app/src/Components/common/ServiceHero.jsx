@@ -1,15 +1,25 @@
 import { Link } from "react-router-dom";
 
-const ServiceHero = ({ title, description, image, breadcrumbs = [], eyebrow = "Service" }) => {
+const ServiceHero = ({
+  title,
+  description,
+  image,
+  breadcrumbs = [],
+  eyebrow = "Service",
+  overlay = "linear-gradient(rgba(15, 23, 42, 0.46), rgba(15, 23, 42, 0.46))",
+}) => {
   return (
     <section
-      className="page-banner page-banner-light service-detail-hero"
-      style={{ "--banner-image": `url('${image}')` }}
+      className="hero-section page-banner page-banner-left page-banner-light service-detail-hero"
+      style={{
+        "--banner-image": `url('${image}')`,
+        "--banner-overlay": overlay,
+      }}
     >
-      <div className="section-shell page-banner-content">
-        <span className="section-eyebrow section-eyebrow-light">{eyebrow}</span>
+      <div className="section-shell page-banner-content page-banner-left-content service-detail-hero-content">
+        <span className="hero-badge">{eyebrow}</span>
         <h1>{title}</h1>
-        <div className="breadcrumb-row">
+        <div className="breadcrumb-row service-detail-breadcrumbs">
           {breadcrumbs.map((crumb, index) => (
             <span key={crumb.label}>
               {index > 0 && <span className="breadcrumb-separator">/</span>}

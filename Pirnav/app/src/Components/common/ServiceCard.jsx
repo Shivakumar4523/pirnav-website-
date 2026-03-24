@@ -8,7 +8,6 @@ const ServiceCard = ({
   image,
   to,
   icon: Icon,
-  highlights = [],
   delay = 0,
 }) => {
   const ref = useRevealOnScroll();
@@ -29,23 +28,13 @@ const ServiceCard = ({
           </div>
           <div className="service-card-body">
             <div className="service-card-head">
-              <div className="feature-icon">{Icon && <Icon size={22} />}</div>
+              <div className="service-card-title-row">
+                <div className="feature-icon">{Icon && <Icon size={20} />}</div>
+                <h3>{title}</h3>
+              </div>
               <ArrowRight size={18} className="service-card-arrow" />
             </div>
-            <h3>{title}</h3>
             <p>{description}</p>
-            {highlights.length > 0 && (
-              <div className="tag-row">
-                {highlights.map((highlight) => (
-                  <span key={highlight} className="mini-tag">
-                    {highlight}
-                  </span>
-                ))}
-              </div>
-            )}
-            <span className="button button-ghost button-md service-card-button">
-              Learn more
-            </span>
           </div>
         </Link>
         <div className="flip-card-back">

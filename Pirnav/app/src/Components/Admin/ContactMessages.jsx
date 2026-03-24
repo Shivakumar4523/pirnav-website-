@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Search, Eye, Trash2, Clock } from "lucide-react";
 
 import "./Admin.css";
+import { clearAdminToken, getAdminHeaders, getAdminToken } from "./adminAuth";
  
 const API_BASE =
 
@@ -27,38 +28,24 @@ const ContactMessages = () => {
   const [loading, setLoading] = useState(false);
  
   const navigate = useNavigate();
+  const token = getAdminToken();
  
   const getHeaders = () => {
-
-    const token = localStorage.getItem("adminToken");
- 
-    if (!token) {
-
-      navigate("/admin-login");
-
-      return null;
-
-    }
- 
-    return {
-
-      "Content-Type": "application/json",
-
-      "ngrok-skip-browser-warning": "true",
-
-      Authorization: `Bearer ${token}`,
-
-    };
+    return getAdminHeaders(token);
 
   };
  
   useEffect(() => {
+    if (!token) {
+      navigate("/admin-login", { replace: true });
+      return;
+    }
 
     fetchMessages();
 
     fetchUnreadCount();
 
-  }, []);
+  }, [navigate, token]);
  
   // ===============================
 
@@ -77,6 +64,12 @@ const ContactMessages = () => {
       if (!headers) return;
  
       const res = await fetch(API_BASE, { headers });
+
+      if (res.status === 401) {
+        clearAdminToken();
+        navigate("/admin-login", { replace: true });
+        return;
+      }
 
       const data = await res.json();
  
@@ -113,6 +106,12 @@ const ContactMessages = () => {
         headers,
 
       });
+
+      if (res.status === 401) {
+        clearAdminToken();
+        navigate("/admin-login", { replace: true });
+        return;
+      }
  
       if (!res.ok) return;
  
@@ -149,6 +148,12 @@ const ContactMessages = () => {
         headers,
 
       });
+
+      if (res.status === 401) {
+        clearAdminToken();
+        navigate("/admin-login", { replace: true });
+        return;
+      }
  
       const data = await res.json();
 
@@ -156,13 +161,19 @@ const ContactMessages = () => {
  
       if (data.status === "Unread") {
 
-        await fetch(`${API_BASE}/mark-read/${id}`, {
+      const markReadResponse = await fetch(`${API_BASE}/mark-read/${id}`, {
 
           method: "PUT",
 
           headers,
 
         });
+
+        if (markReadResponse.status === 401) {
+          clearAdminToken();
+          navigate("/admin-login", { replace: true });
+          return;
+        }
  
         await fetchMessages();
 
@@ -192,13 +203,19 @@ const ContactMessages = () => {
 
       if (!headers) return;
  
-      await fetch(`${API_BASE}/${deleteMsg.id}`, {
+      const response = await fetch(`${API_BASE}/${deleteMsg.id}`, {
 
         method: "DELETE",
 
         headers,
 
       });
+
+      if (response.status === 401) {
+        clearAdminToken();
+        navigate("/admin-login", { replace: true });
+        return;
+      }
  
       await fetchMessages();
 

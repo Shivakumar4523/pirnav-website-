@@ -1,16 +1,33 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { BriefcaseBusiness, GraduationCap, Search } from "lucide-react";
 import SectionWrapper from "../../components/common/SectionWrapper";
 import FeatureCard from "../../components/common/FeatureCard";
-import CTASection from "../../components/common/CTASection";
 import { whyJoinUs } from "../../data/siteContent";
+import "./Careers.css";
 
 const BASE_URL = "https://farrandly-interalar-talon.ngrok-free.dev/api";
+const extendedWhyJoinUs = [
+  ...whyJoinUs,
+  {
+    title: "Learning & development",
+    description:
+      "Continuous learning through mentorship, training programs, and exposure to modern technologies.",
+    icon: GraduationCap,
+  },
+  {
+    title: "Flexible work culture",
+    description:
+      "A supportive environment that promotes work-life balance, flexibility, and employee well-being.",
+    icon: BriefcaseBusiness,
+  },
+];
 
 const Careers = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openId, setOpenId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,23 +55,37 @@ const Careers = () => {
     fetchJobs();
   }, []);
 
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const filteredJobs = jobs.filter((job) => {
+    if (!normalizedSearch) return true;
+
+    const searchableText = [
+      job.jobTitle,
+      job.workLocation,
+      job.mandatorySkills,
+      job.jobDescription,
+      job.jobType,
+      job.experience,
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    return searchableText.includes(normalizedSearch);
+  });
+
   return (
-    <div className="page-shell">
+    <div id="careers" className="page-shell careers-page">
       <section
-        className="page-banner page-banner-light"
+        className="hero-section page-banner page-banner-left page-banner-light"
         style={{
           "--banner-image":
             "url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=2400&q=85')",
         }}
       >
-        <div className="section-shell page-banner-content">
-          <span className="section-eyebrow section-eyebrow-light">Careers</span>
+        <div className="section-shell page-banner-content page-banner-left-content">
+          <span className="hero-badge">Careers</span>
           <h1>Build your career with us.</h1>
-          <div className="breadcrumb-row">
-            <Link to="/">Home</Link>
-            <span>/</span>
-            <span>Careers</span>
-          </div>
           <p>
             Work with talented engineers and contribute to impactful technology solutions
             across enterprise platforms, applications, and modernization programs.
@@ -63,56 +94,66 @@ const Careers = () => {
       </section>
 
       <SectionWrapper
-        className="section-surface-white"
-        eyebrow="Why Join Us"
+        className="section-surface-white careers-why-join-section"
+        eyebrow="Why Pirnav"
         title="A recruiting experience that reflects modern engineering teams."
         description="We create opportunities for engineers and technology professionals to work on meaningful delivery programs with collaborative teams and long-term growth."
       >
-        <div className="career-layout careers-overview-layout">
-          <article className="career-card career-intro">
-            <h3>Work on modern platforms with experienced teams</h3>
-            <p>
-              Join an environment focused on real delivery ownership, practical learning,
-              and technology work that supports measurable client outcomes.
-            </p>
-            <div className="careers-benefits-list">
-              <span className="mini-tag">Flexible work environment</span>
-              <span className="mini-tag">Learning and development</span>
-              <span className="mini-tag">Modern technologies</span>
-              <span className="mini-tag">Collaborative engineering culture</span>
-            </div>
-          </article>
-          <div className="feature-grid careers-benefits-grid">
-            {whyJoinUs.map((item, index) => (
-              <FeatureCard
-                key={item.title}
-                icon={item.icon}
-                title={item.title}
-                description={item.description}
-                delay={index * 80}
-              />
-            ))}
-          </div>
+        <div className="feature-grid careers-benefits-grid">
+          {extendedWhyJoinUs.map((item, index) => (
+            <FeatureCard
+              key={item.title}
+              icon={item.icon}
+              title={item.title}
+              description={item.description}
+              delay={index * 80}
+              className="careers-benefit-card"
+            />
+          ))}
         </div>
       </SectionWrapper>
 
       <SectionWrapper
-        className="section-surface-muted"
-        eyebrow="Open Roles"
-        title="Current opportunities"
-        description="Browse active positions across engineering and enterprise technology delivery."
+        className="section-surface-muted careers-open-roles-section"
+        contentClassName="careers-open-roles-content"
       >
-        <div className="jobs-stack">
-          {loading && <article className="career-card">Loading jobs...</article>}
+        <div className="careers-open-roles-header">
+          <div className="careers-open-roles-heading">
+            <span className="section-eyebrow">Open Roles</span>
+            <h2>Current Opportunities</h2>
+          </div>
+
+          <label className="careers-role-search" aria-label="Search roles">
+            <Search size={18} aria-hidden="true" />
+            <input
+              type="search"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              aria-label="Search roles"
+              placeholder="Search roles (e.g. Developer, QA, Location...)"
+            />
+          </label>
+        </div>
+
+        <div className="jobs-stack careers-jobs-stack">
+          {loading && <article className="job-card-modern careers-job-card">Loading jobs...</article>}
 
           {!loading && jobs.length === 0 && (
-            <article className="career-card">No openings available right now.</article>
+            <article className="job-card-modern careers-job-card careers-jobs-empty">
+              No openings available right now.
+            </article>
           )}
 
-          {jobs.map((job) => (
-            <article key={job.id} className="job-card-modern">
+          {!loading && jobs.length > 0 && filteredJobs.length === 0 && (
+            <article className="job-card-modern careers-job-card careers-jobs-empty">
+              No roles match "{searchTerm}".
+            </article>
+          )}
+
+          {filteredJobs.map((job) => (
+            <article key={job.id} className="job-card-modern careers-job-card">
               <div className="job-card-head">
-                <div>
+                <div className="careers-job-summary">
                   <h3>{job.jobTitle}</h3>
                   <div className="job-card-meta">
                     <span className="job-tag">{job.workLocation}</span>
@@ -124,7 +165,7 @@ const Careers = () => {
                   type="button"
                   className="expand-toggle"
                   onClick={() => setOpenId(openId === job.id ? null : job.id)}
-                  aria-label="Toggle job details"
+                  aria-label={`Toggle details for ${job.jobTitle}`}
                 >
                   {openId === job.id ? "-" : "+"}
                 </button>
@@ -164,14 +205,6 @@ const Careers = () => {
         </div>
       </SectionWrapper>
 
-      <CTASection
-        className="internal-page-cta"
-        eyebrow="Careers"
-        title="Ready to start your next project with us?"
-        description="Connect with our team to learn more about opportunities, projects, and the kind of technology work we deliver."
-        primaryAction={{ label: "Start a Conversation", to: "/contact" }}
-        secondaryAction={{ label: "Explore Services", to: "/services" }}
-      />
     </div>
   );
 };

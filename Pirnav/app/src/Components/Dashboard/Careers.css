@@ -1,0 +1,288 @@
+.careers-page .careers-why-join-section .section-heading {
+  width: 100%;
+  max-width: none;
+  padding: 22px 26px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.careers-page .careers-why-join-section .section-heading h2 {
+  margin-top: 14px;
+  font-size: clamp(2.125rem, 3.2vw, 2.5rem);
+  line-height: 1.12;
+}
+
+.careers-page .careers-why-join-section .section-heading p {
+  margin-top: 12px;
+  max-width: 860px;
+  font-size: 0.94rem;
+  line-height: 1.65;
+}
+
+.careers-page .careers-benefits-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 0;
+  align-items: stretch;
+}
+
+.careers-page .careers-benefit-card {
+  height: 100%;
+  min-height: 198px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 18px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+.careers-page .careers-benefit-card .feature-card-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0;
+}
+
+.careers-page .careers-benefit-card .feature-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: rgba(37, 99, 235, 0.08);
+  box-shadow: none;
+}
+
+.careers-page .careers-benefit-card .feature-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.careers-page .careers-benefit-card h3 {
+  margin: 16px 0 0;
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+.careers-page .careers-benefit-card p {
+  margin: 10px 0 0;
+  font-size: 0.94rem;
+  line-height: 1.65;
+}
+
+.careers-page .careers-open-roles-content {
+  display: grid;
+  gap: 24px;
+}
+
+.careers-page .careers-open-roles-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 22px 26px;
+  border-radius: 24px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+}
+
+.careers-page .careers-open-roles-heading {
+  min-width: 0;
+}
+
+.careers-page .careers-open-roles-heading h2 {
+  margin-top: 14px;
+  font-size: clamp(2.125rem, 3vw, 2.5rem);
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+  color: #0f172a;
+}
+
+.careers-page .careers-role-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(100%, 420px);
+  min-width: 280px;
+  min-height: 52px;
+  padding: 0 16px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #dbe3ef;
+  transition:
+    border-color var(--motion-fast) var(--motion-ease),
+    box-shadow var(--motion-fast) var(--motion-ease),
+    background var(--motion-fast) var(--motion-ease);
+}
+
+.careers-page .careers-role-search svg {
+  flex: 0 0 auto;
+  color: #64748b;
+}
+
+.careers-page .careers-role-search:focus-within {
+  background: #ffffff;
+  border-color: rgba(59, 130, 246, 0.45);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+.careers-page .careers-role-search input {
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #0f172a;
+  font-size: 0.94rem;
+  line-height: 1.5;
+}
+
+.careers-page .careers-role-search input::placeholder {
+  color: #94a3b8;
+}
+
+.careers-page .careers-jobs-stack {
+  gap: 18px;
+}
+
+.careers-page .careers-open-roles-section .careers-job-card {
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+}
+
+.careers-page .careers-open-roles-section .careers-job-card:hover {
+  transform: translate3d(0, -2px, 0);
+  border-color: rgba(96, 165, 250, 0.45) !important;
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.1);
+}
+
+.careers-page .careers-open-roles-section .job-card-head {
+  align-items: center;
+  gap: 18px;
+}
+
+.careers-page .careers-job-summary {
+  min-width: 0;
+}
+
+.careers-page .careers-open-roles-section .job-card-head h3 {
+  margin: 0;
+  font-size: clamp(1.125rem, 1.8vw, 1.25rem);
+  line-height: 1.35;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.careers-page .careers-open-roles-section .job-card-meta {
+  margin-top: 12px;
+  gap: 8px;
+}
+
+.careers-page .careers-open-roles-section .job-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  color: #334155;
+  font-size: 0.78rem;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.careers-page .careers-open-roles-section .expand-toggle {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  flex: 0 0 auto;
+}
+
+.careers-page .careers-open-roles-section .job-expand-panel {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.careers-page .careers-open-roles-section .job-expand-panel p {
+  font-size: 0.94rem;
+  line-height: 1.65;
+}
+
+.careers-page .careers-jobs-empty {
+  color: #475569;
+}
+
+@media (max-width: 992px) {
+  .careers-page .careers-benefits-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .careers-page .careers-open-roles-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .careers-page .careers-role-search {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .careers-page .careers-why-join-section .section-heading {
+    padding: 18px;
+    margin-bottom: 20px;
+  }
+
+  .careers-page .careers-why-join-section .section-heading h2 {
+    font-size: clamp(2rem, 8vw, 2.2rem);
+  }
+
+  .careers-page .careers-why-join-section .section-heading p,
+  .careers-page .careers-benefit-card p {
+    font-size: 0.92rem;
+  }
+
+  .careers-page .careers-benefits-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .careers-page .careers-benefit-card {
+    min-height: 0;
+    padding: 18px;
+  }
+
+  .careers-page .careers-open-roles-header {
+    padding: 18px;
+  }
+
+  .careers-page .careers-open-roles-heading h2 {
+    font-size: clamp(2rem, 8vw, 2.2rem);
+  }
+
+  .careers-page .careers-open-roles-section .careers-job-card {
+    padding: 16px 18px;
+  }
+
+  .careers-page .careers-open-roles-section .job-card-head {
+    gap: 14px;
+  }
+
+  .careers-page .careers-open-roles-section .job-card-head h3 {
+    font-size: 1.08rem;
+  }
+
+  .careers-page .careers-open-roles-section .job-tag {
+    font-size: 0.75rem;
+  }
+}
