@@ -28,7 +28,7 @@ const technologies = [
 
 const TechnologyMarquee = () => {
   return (
-    <div className="technologies-marquee-shell">
+    <div className="technologies-marquee-shell tech-stack">
       <div className="technologies-marquee-viewport">
         <div className="technologies-marquee-track">
           {[0, 1].map((copyIndex) => (

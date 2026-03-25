@@ -88,7 +88,7 @@ const Careers = () => {
       : `${filteredJobs.length} ${filteredJobs.length === 1 ? "role" : "roles"} available`;
 
   return (
-    <div id="careers" className="page-shell careers-page">
+    <div id="careers" className="page-shell careers careers-page">
       <section
         className="hero-section page-banner page-banner-left page-banner-light careers-hero"
         style={{
@@ -109,7 +109,7 @@ const Careers = () => {
       </section>
 
       <SectionWrapper
-        className="section-surface-white careers-why-join-section"
+        className="careers-why-join-section"
         eyebrow="Why Pirnav"
         title="A recruiting experience that reflects modern engineering teams."
         description="We create opportunities for engineers and technology professionals to work on meaningful delivery programs with collaborative teams and long-term growth."
@@ -129,7 +129,7 @@ const Careers = () => {
       </SectionWrapper>
 
       <SectionWrapper
-        className="section-surface-muted careers-open-roles-section"
+        className="careers-open-roles-section"
         contentClassName="careers-open-roles-content"
       >
         <div className="careers-open-roles-header">
