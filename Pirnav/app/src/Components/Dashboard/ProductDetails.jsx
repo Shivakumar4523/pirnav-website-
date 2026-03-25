@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Button from "../../components/common/Button";
-import DemoModal from "./DemoModal";
 import SectionWrapper from "../../components/common/SectionWrapper";
 import ServiceContent from "../../components/common/ServiceContent";
 import ServiceHero from "../../components/common/ServiceHero";
@@ -18,7 +17,6 @@ const ProductDetails = ({ id: providedId }) => {
   const { id: routeId } = useParams();
   const resolvedId = providedId || routeId;
   const product = getProductById(resolvedId);
-  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -94,13 +92,8 @@ const ProductDetails = ({ id: providedId }) => {
           </div>
 
           <div className="product-details-toolbar-actions">
-            <Button
-              type="button"
-              size="sm"
-              className="product-details-demo-button"
-              onClick={() => setIsDemoModalOpen(true)}
-            >
-              Book Demo
+            <Button to="/contact" size="sm" className="product-details-demo-button">
+              Contact Us
             </Button>
             <Button to="/products" variant="secondary" size="sm">
               Back to Products
@@ -108,14 +101,6 @@ const ProductDetails = ({ id: providedId }) => {
           </div>
         </div>
       </SectionWrapper>
-
-      {isDemoModalOpen && (
-        <DemoModal
-          productName={productDisplayName}
-          productType="Product"
-          onClose={() => setIsDemoModalOpen(false)}
-        />
-      )}
 
       <SectionWrapper
         className="section-surface-muted product-details-delivery-section"

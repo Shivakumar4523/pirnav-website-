@@ -18,8 +18,9 @@
   --radius-sm: 16px;
   --radius-md: 24px;
   --radius-lg: 32px;
-  --section-space: 60px;
-  --container-width: 1200px;
+  --section-space: 40px;
+  --container-width: 1280px;
+  --page-gutter: 16px;
   --motion-ease: cubic-bezier(0.4, 0, 0.2, 1);
   --motion-fast: 0.3s;
   --motion-medium: 0.3s;
@@ -48,7 +49,7 @@ html {
 
 /* SERVICES CAROUSEL START */
 .services-carousel-section {
-  padding: 40px 0;
+  padding: 40px var(--page-gutter);
 }
 
 .services-carousel-wrapper {
@@ -111,7 +112,7 @@ html {
 
 @media (max-width: 768px) {
   .services-carousel-section {
-    padding: 32px 0;
+    padding: 32px var(--page-gutter);
   }
 
   .services-carousel-track {
@@ -235,17 +236,16 @@ canvas {
 }
 
 img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  max-width: 100%;
   display: block;
+  max-width: 100%;
+  height: auto;
 }
 
 section {
   position: relative;
   z-index: 3;
-  padding: 50px 80px;
+  width: 100%;
+  padding: var(--section-space) var(--page-gutter);
   margin: 0;
   display: flow-root;
   background: transparent;
@@ -265,7 +265,7 @@ a {
   width: 100%;
   max-width: var(--container-width);
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0;
 }
 
 .wrapper,
@@ -300,7 +300,7 @@ p {
 
 .hero-section + section,
 .page-banner + section {
-  margin-top: 40px;
+  margin-top: 0;
 }
 
 .about-section {
@@ -308,11 +308,13 @@ p {
 }
 
 .section-block {
-  padding: 50px 80px;
+  width: 100%;
+  padding: var(--section-space) var(--page-gutter);
 }
 
 .section-wrapper {
-  padding: 50px 80px;
+  width: 100%;
+  padding: var(--section-space) var(--page-gutter);
 }
 
 .hero-section,
@@ -368,7 +370,7 @@ p {
 .hero-dots {
   position: absolute;
   bottom: 20px;
-  left: 60px;
+  left: var(--page-gutter);
   z-index: 3;
   display: flex;
   align-items: center;
@@ -696,7 +698,8 @@ canvas {
   width: 100%;
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
-  padding: 10px clamp(16px, 2vw, 24px);
+  margin: 0;
+  padding: 0;
   transition: all 0.3s ease;
   will-change: transform;
   transform: translateZ(0);
@@ -708,15 +711,17 @@ canvas {
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
 }
 
+.navbar-inner,
 .nav-container {
   width: 100%;
-  max-width: none;
+  max-width: 100%;
   margin: 0;
   display: flex;
   position: relative;
   align-items: center;
   justify-content: space-between;
   gap: 18px;
+  padding: 12px 20px;
 }
 
 .logo-link {
@@ -724,6 +729,7 @@ canvas {
   align-items: center;
   text-decoration: none;
   justify-content: flex-start;
+  margin-left: 0;
 }
 
 .navbar-logo {
@@ -735,7 +741,7 @@ canvas {
 }
 
 .executive-section {
-  padding: 40px 0;
+  padding: 40px var(--page-gutter);
   background: transparent;
 }
 
@@ -745,8 +751,9 @@ canvas {
   justify-content: space-between;
   gap: 36px;
   padding: 30px 36px;
-  max-width: 1100px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
   border-radius: 12px;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -894,6 +901,8 @@ canvas {
 .nav-links {
   margin-left: auto;
   flex-wrap: nowrap;
+  justify-content: flex-end;
+  gap: 20px;
 }
 
 .mobile-nav-panel {
@@ -1134,7 +1143,7 @@ canvas {
   position: relative;
   overflow: hidden;
   border-radius: 20px;
-  margin-bottom: 40px;
+  margin-bottom: 0;
   display: flex !important;
   align-items: center;
   justify-content: center;
@@ -1208,7 +1217,7 @@ main > section:first-child,
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 60px 80px;
+  padding: 60px var(--page-gutter);
   background: transparent;
   min-height: 600px;
 }
@@ -1247,8 +1256,8 @@ main > section:first-child,
 }
 
 .hero-card {
-  width: 95%;
-  max-width: 1400px;
+  width: min(calc(100% - (var(--page-gutter) * 2)), var(--container-width));
+  max-width: var(--container-width);
   height: 100%;
   min-height: 600px;
   border-radius: 20px;
@@ -1266,9 +1275,10 @@ main > section:first-child,
 }
 
 .hero-container {
-  max-width: 1200px;
+  width: 100%;
+  max-width: var(--container-width);
   margin: 0 auto;
-  padding: 80px 24px;
+  padding: 80px 0;
 }
 
 .hero-card img {
@@ -1281,10 +1291,12 @@ main > section:first-child,
   backface-visibility: hidden;
 }
 
+.hero-image,
 .hero-section img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
   transition: none;
 }
 
@@ -1320,7 +1332,7 @@ main > section:first-child,
   grid-template-columns: minmax(0, 1fr) minmax(420px, 0.92fr);
   gap: 60px;
   align-items: center;
-  padding: 0 24px;
+  padding: 0 var(--page-gutter);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -1373,7 +1385,7 @@ main > section:first-child,
 
 .hero-overlay {
   max-width: 600px;
-  margin-left: 60px;
+  margin-left: 0;
   margin-right: auto;
   padding: 40px;
   background: rgba(255, 255, 255, 0.15);
@@ -1385,10 +1397,11 @@ main > section:first-child,
 .hero-content {
   position: absolute;
   bottom: 80px;
-  left: 60px;
+  left: var(--page-gutter);
+  right: var(--page-gutter);
   z-index: 2;
   width: 100%;
-  max-width: 650px;
+  max-width: min(650px, calc(100% - (var(--page-gutter) * 2)));
   color: #ffffff;
   animation: fadeUp 1s ease-out;
 }
@@ -1628,7 +1641,9 @@ main > section:first-child,
 .contact-info-grid,
 .service-grid {
   display: grid;
+  width: 100%;
   gap: var(--tile-gap);
+  margin: 0;
 }
 
 .stats-grid {
@@ -2787,7 +2802,7 @@ main > section:first-child,
   }
 
   .footer {
-    padding: 40px 20px;
+    padding: 40px var(--page-gutter);
   }
 }
 
@@ -2796,7 +2811,7 @@ main > section:first-child,
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 120px 0 80px;
+  padding: 120px var(--page-gutter) 80px;
   overflow: hidden;
   border-radius: 20px;
   background: #0f172a;
@@ -2841,7 +2856,7 @@ main > section:first-child,
 .page-banner-left-content {
   width: 100%;
   max-width: 600px;
-  margin-left: clamp(20px, 6vw, 80px);
+  margin-left: 0;
   margin-right: 0;
   text-align: left;
   align-items: flex-start;
@@ -3798,6 +3813,23 @@ main > section:first-child,
   margin-top: 24px;
 }
 
+.job-apply-contact-note {
+  margin: 2px 0 0;
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.job-apply-contact-note a {
+  color: var(--button-secondary-text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.job-apply-contact-note a:hover {
+  text-decoration: underline;
+}
+
 .job-detail-card label {
   display: block;
   margin-bottom: 8px;
@@ -3837,13 +3869,13 @@ main > section:first-child,
 }
 
 .service-detail-hero {
-  padding: 104px 0 52px;
+  padding: 104px var(--page-gutter) 52px;
 }
 
 .service-detail-hero .page-banner-content {
   width: 100%;
   max-width: 600px;
-  margin-left: clamp(20px, 6vw, 80px);
+  margin-left: 0;
   margin-right: 0;
   text-align: left;
   justify-content: flex-start;
@@ -4392,16 +4424,16 @@ main > section:first-child,
 
 @media (max-width: 768px) {
   section {
-    padding: 40px 20px;
+    padding: var(--section-space) var(--page-gutter);
   }
 
   .section-block,
   .executive-section {
-    padding: 40px 20px;
+    padding: var(--section-space) var(--page-gutter);
   }
 
   .section-wrapper {
-    padding: 40px 20px;
+    padding: var(--section-space) var(--page-gutter);
   }
 
   .executive-card {
@@ -4455,7 +4487,7 @@ main > section:first-child,
   }
 
   .hero-container {
-    padding: 60px 20px;
+    padding: 60px 0;
   }
 
   .hero-content {
@@ -4475,7 +4507,7 @@ main > section:first-child,
   }
 
   .page-banner {
-    padding: 96px 0 60px;
+    padding: 96px var(--page-gutter) 60px;
   }
 
   .hero-section + section,
@@ -4540,6 +4572,12 @@ main > section:first-child,
   }
 
   .navbar {
+    margin: 0;
+    padding: 0;
+  }
+
+  .navbar-inner,
+  .nav-container {
     padding: 12px 20px;
   }
 
@@ -4795,7 +4833,7 @@ main > section:first-child,
   }
 
   .service-detail-hero {
-    padding: 92px 0 48px;
+    padding: 92px var(--page-gutter) 48px;
   }
 
   .service-detail-hero .page-banner-content {
@@ -4936,11 +4974,11 @@ main > section:first-child,
     top: auto;
     transform: none;
     max-width: 100%;
-    padding: 40px 24px;
+    padding: 40px var(--page-gutter);
   }
 
   .hero-dots {
-    left: 24px;
+    left: var(--page-gutter);
   }
 
   .hero-slide-copy .section-eyebrow {
@@ -5048,7 +5086,7 @@ main > section:first-child,
   }
 
   .page-banner {
-    padding: 96px 0 60px;
+    padding: 96px var(--page-gutter) 60px;
   }
 
   .enterprise-careers-panel {
@@ -5081,10 +5119,10 @@ main > section:first-child,
 
   .page-banner-left .page-banner-content,
   .page-banner-left-content {
-    width: calc(100% - 40px);
+    width: 100%;
     max-width: none;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .strength-grid {
@@ -5092,13 +5130,13 @@ main > section:first-child,
   }
 
   .service-detail-hero {
-    padding: 84px 0 36px;
+    padding: 84px var(--page-gutter) 36px;
   }
 
   .service-detail-hero .page-banner-content {
     max-width: none;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .about-company-overview .section-heading,
@@ -5296,7 +5334,7 @@ main > section:first-child,
 
 /* SERVICES CAROUSEL OVERRIDES START */
 .services-carousel-section {
-  padding: 40px 0;
+  padding: 40px var(--page-gutter);
 }
 
 .services-carousel-wrapper {
@@ -5431,7 +5469,7 @@ main > section:first-child,
 
 @media (max-width: 768px) {
   .services-carousel-section {
-    padding: 32px 0;
+    padding: 32px var(--page-gutter);
   }
 
   .services-carousel {
@@ -5507,10 +5545,13 @@ main > section:first-child,
 
 /* FOOTER COMPACT OVERRIDES START */
 .footer {
-  padding: 36px 60px 16px;
+  padding: 36px var(--page-gutter) 16px;
 }
 
 .footer-container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
   gap: 24px;
 }
 
@@ -5545,7 +5586,9 @@ main > section:first-child,
 }
 
 .footer-bottom {
-  margin-top: 24px;
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 24px auto 0;
   padding-top: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   font-size: 0.78rem;
@@ -5553,7 +5596,7 @@ main > section:first-child,
 
 @media (max-width: 900px) {
   .footer {
-    padding: 32px 20px 14px;
+    padding: 32px var(--page-gutter) 14px;
   }
 
   .footer-container {

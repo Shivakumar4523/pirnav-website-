@@ -1,21 +1,9 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import DemoModal from "./DemoModal";
 import SectionWrapper from "../../components/common/SectionWrapper";
 import { productCatalog } from "../../data/siteContent";
 import "./Products.css";
 
 const Products = () => {
-  const [activeProduct, setActiveProduct] = useState("");
-
-  const closeDemoModal = () => {
-    setActiveProduct("");
-  };
-
-  const openDemoModal = (product) => {
-    setActiveProduct(product);
-  };
-
   const handleCardPointerEnter = (event) => {
     event.currentTarget.style.setProperty("--products-glow-opacity", "1");
   };
@@ -88,14 +76,12 @@ const Products = () => {
               </div>
 
               <div className="products-card-actions">
-                <button
-                  type="button"
+                <Link
+                  to="/contact"
                   className="button button-primary button-sm products-card-action"
-                  onClick={() => openDemoModal(productHeading)}
-                  aria-haspopup="dialog"
                 >
-                  Book Demo
-                </button>
+                  Contact Us
+                </Link>
 
                 <Link
                   to={`/products/${product.id}`}
@@ -109,14 +95,6 @@ const Products = () => {
           );
         })}
       </SectionWrapper>
-
-      {activeProduct && (
-        <DemoModal
-          productName={activeProduct}
-          productType="Product"
-          onClose={closeDemoModal}
-        />
-      )}
     </div>
   );
 };

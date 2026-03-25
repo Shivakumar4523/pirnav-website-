@@ -270,6 +270,10 @@ const JobDetails = () => {
               <button type="submit" className="button button-primary button-md" disabled={loading}>
                 {loading ? "Submitting..." : "Submit Application"}
               </button>
+              <p className="job-apply-contact-note">
+                Send us your resume to{" "}
+                <a href="mailto:hr@pirnav.com">hr@pirnav.com</a>
+              </p>
             </form>
           </article>
 

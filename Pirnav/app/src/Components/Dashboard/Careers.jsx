@@ -7,6 +7,9 @@ import { whyJoinUs } from "../../data/siteContent";
 import "./Careers.css";
 
 const BASE_URL = "https://farrandly-interalar-talon.ngrok-free.dev/api";
+const JOB_PREVIEW_FALLBACK =
+  "Join a collaborative team building reliable software, modern platforms, and high-impact solutions for growing businesses.";
+
 const extendedWhyJoinUs = [
   ...whyJoinUs,
   {
@@ -23,10 +26,15 @@ const extendedWhyJoinUs = [
   },
 ];
 
+const getJobPreview = (description) => {
+  const normalizedDescription = description?.replace(/\s+/g, " ").trim();
+
+  return normalizedDescription || JOB_PREVIEW_FALLBACK;
+};
+
 const Careers = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [openId, setOpenId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
@@ -73,14 +81,21 @@ const Careers = () => {
 
     return searchableText.includes(normalizedSearch);
   });
+  const resultsSummary = loading
+    ? "Loading roles..."
+    : jobs.length === 0
+      ? "No openings right now"
+      : `${filteredJobs.length} ${filteredJobs.length === 1 ? "role" : "roles"} available`;
 
   return (
     <div id="careers" className="page-shell careers-page">
       <section
-        className="hero-section page-banner page-banner-left page-banner-light"
+        className="hero-section page-banner page-banner-left page-banner-light careers-hero"
         style={{
           "--banner-image":
             "url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=2400&q=85')",
+          "--banner-overlay":
+            "linear-gradient(100deg, rgba(15, 23, 42, 0.82) 4%, rgba(15, 23, 42, 0.58) 48%, rgba(15, 23, 42, 0.18) 100%)",
         }}
       >
         <div className="section-shell page-banner-content page-banner-left-content">
@@ -119,20 +134,28 @@ const Careers = () => {
       >
         <div className="careers-open-roles-header">
           <div className="careers-open-roles-heading">
-            <span className="section-eyebrow">Open Roles</span>
-            <h2>Current Opportunities</h2>
+            <span className="section-eyebrow">Join Our Team</span>
+            <h2>Build the future with us</h2>
+            <p>
+              Explore open roles across engineering, QA, delivery, and enterprise
+              technology teams.
+            </p>
           </div>
 
-          <label className="careers-role-search" aria-label="Search roles">
-            <Search size={18} aria-hidden="true" />
-            <input
-              type="search"
-              value={searchTerm}
-              onChange={(event) => setSearchTerm(event.target.value)}
-              aria-label="Search roles"
-              placeholder="Search roles (e.g. Developer, QA, Location...)"
-            />
-          </label>
+          <div className="careers-open-roles-toolbar">
+            <label className="careers-role-search" aria-label="Search roles">
+              <Search size={18} aria-hidden="true" />
+              <input
+                type="search"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                aria-label="Search roles"
+                placeholder="Search roles (e.g. Developer, QA, Location...)"
+              />
+            </label>
+
+            <span className="careers-results-count">{resultsSummary}</span>
+          </div>
         </div>
 
         <div className="jobs-stack careers-jobs-stack">
@@ -152,54 +175,45 @@ const Careers = () => {
 
           {filteredJobs.map((job) => (
             <article key={job.id} className="job-card-modern careers-job-card">
-              <div className="job-card-head">
+              <div className="careers-job-card-body">
                 <div className="careers-job-summary">
                   <h3>{job.jobTitle}</h3>
                   <div className="job-card-meta">
-                    <span className="job-tag">{job.workLocation}</span>
-                    <span className="job-tag">{job.jobType}</span>
-                    <span className="job-tag">{job.experience}</span>
+                    {[job.workLocation, job.jobType, job.experience]
+                      .filter(Boolean)
+                      .map((tag) => (
+                        <span key={`${job.id}-${tag}`} className="job-tag">
+                          {tag}
+                        </span>
+                      ))}
                   </div>
-                </div>
-                <button
-                  type="button"
-                  className="expand-toggle"
-                  onClick={() => setOpenId(openId === job.id ? null : job.id)}
-                  aria-label={`Toggle details for ${job.jobTitle}`}
-                >
-                  {openId === job.id ? "-" : "+"}
-                </button>
-              </div>
 
-              {openId === job.id && (
-                <div className="job-expand-panel">
-                  <p>
-                    <strong>Location:</strong> {job.workLocation}
-                  </p>
-                  <p>
-                    <strong>Experience:</strong> {job.experience}
-                  </p>
-                  <p>
-                    <strong>CTC:</strong> {job.ctc}
-                  </p>
-                  <p>
-                    <strong>Qualification:</strong> {job.highestQualification}
-                  </p>
-                  <p>
-                    <strong>Description:</strong> {job.jobDescription}
-                  </p>
-                  <p>
-                    <strong>Skills:</strong> {job.mandatorySkills}
-                  </p>
+                  <p className="careers-job-description">{getJobPreview(job.jobDescription)}</p>
+                </div>
+
+                <div className="careers-job-actions">
                   <button
                     type="button"
-                    className="button button-primary button-sm"
+                    className="button button-primary button-sm careers-apply-button"
                     onClick={() => navigate(`/careers/${job.id}`)}
                   >
                     Apply Now
                   </button>
+
+                  <button
+                    type="button"
+                    className="careers-view-details"
+                    onClick={() => navigate(`/careers/${job.id}`)}
+                  >
+                    View Details
+                  </button>
                 </div>
-              )}
+
+                <p className="careers-apply-contact-note">
+                  Or email your resume to{" "}
+                  <a href="mailto:hr@pirnav.com">hr@pirnav.com</a>
+                </p>
+              </div>
             </article>
           ))}
         </div>

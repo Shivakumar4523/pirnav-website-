@@ -182,7 +182,7 @@
 }
 
 .product-details-page .page-banner + .section-wrapper {
-  margin-top: 22px;
+  margin-top: 0;
 }
 
 .product-details-page .section-wrapper + .section-wrapper {
@@ -594,7 +594,7 @@
   }
 
   .product-details-page .page-banner + .section-wrapper {
-    margin-top: 20px;
+    margin-top: 0;
   }
 
   .product-details-page .section-wrapper + .section-wrapper {

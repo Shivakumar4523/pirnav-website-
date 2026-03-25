@@ -73,7 +73,7 @@ const Navbar = () => {
   return (
     <header className="site-header">
       <nav className="navbar" aria-label="Primary navigation">
-        <div className="nav-container">
+        <div className="navbar-inner nav-container">
           <Link to="/" className="logo-link" onClick={closeMobileMenu} aria-label="Pirnav home">
             <img src="/images/logo.png" alt="Pirnav Logo" className="navbar-logo" />
           </Link>
