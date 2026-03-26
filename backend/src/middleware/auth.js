@@ -9,7 +9,12 @@ export function requireAdminAuth(req, res, next) {
   }
 
   try {
-    const secret = process.env.ADMIN_JWT_SECRET || "dev-secret-change-me";
+    const secret = process.env.ADMIN_JWT_SECRET;
+
+    if (!secret) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const payload = jwt.verify(token, secret);
 
     req.admin = {

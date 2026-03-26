@@ -1,13 +1,13 @@
 import { getAdminHeaders } from "./adminAuth";
 
-const LEGACY_INTERVIEW_API_BASE =
-  "https://farrandly-interalar-talon.ngrok-free.dev/api/interview";
+// Use same-origin relative API calls so Docker/nginx routing works in any environment.
+const API_PREFIX = "/api";
+
 const DEFAULT_INTERVIEW_TIME_FALLBACK = "10:00:00";
 const DEFAULT_INTERVIEW_MODE_FALLBACK = "Online";
 const DEFAULT_INTERVIEW_LINK_FALLBACK = "https://meet.link";
 const DEFAULT_INTERVIEW_NOTES_FALLBACK = "Initial Screening";
 
-const normalizeUrl = (value) => String(value || "").trim().replace(/\/+$/, "");
 const normalizeInterviewMode = (value) =>
   String(value || "").toLowerCase() === "offline" ? "Offline" : "Online";
 const normalizeInterviewTime = (value) => {
@@ -23,56 +23,9 @@ const formatInterviewDateForApi = (value) => {
   return Number.isNaN(parsed.getTime()) ? new Date().toISOString() : parsed.toISOString();
 };
 
-const getRuntimeApiOrigin = () => {
-  if (typeof window === "undefined") {
-    return "";
-  }
-
-  const { origin, port } = window.location;
-  return port === "5173" || port === "4173" ? "" : origin;
-};
-
-const joinUrl = (base, path) => {
-  const normalizedBase = normalizeUrl(base);
-  const normalizedPath = String(path || "").replace(/^\/+/, "");
-
-  if (!normalizedBase) {
-    return "";
-  }
-
-  return `${normalizedBase}/${normalizedPath}`;
-};
-
-const getConfiguredInterviewApiBase = () =>
-  normalizeUrl(import.meta.env.VITE_INTERVIEW_API_BASE) ||
-  normalizeUrl(import.meta.env.VITE_INTERVIEWS_API_BASE) ||
-  joinUrl(normalizeUrl(import.meta.env.VITE_API_BASE_URL), "/api/interview") ||
-  LEGACY_INTERVIEW_API_BASE;
-
-const getInterviewApiBases = () => {
-  const exactBases = [
-    normalizeUrl(import.meta.env.VITE_INTERVIEW_API_BASE),
-    normalizeUrl(import.meta.env.VITE_INTERVIEWS_API_BASE),
-  ].filter(Boolean);
-  const originCandidates = [
-    normalizeUrl(import.meta.env.VITE_API_BASE_URL),
-    normalizeUrl(getRuntimeApiOrigin()),
-    "https://localhost:5001",
-    "http://localhost:5000",
-    LEGACY_INTERVIEW_API_BASE.replace(/\/api\/interview$/i, ""),
-  ].filter(Boolean);
-  const derivedBases = originCandidates.flatMap((origin) => [
-    joinUrl(origin, "/api/interview"),
-    joinUrl(origin, "/api/interviews"),
-  ]);
-
-  return [...new Set([...exactBases, ...derivedBases].filter(Boolean))];
-};
-
-export const INTERVIEW_API_BASES = getInterviewApiBases();
-export const INTERVIEW_API_BASE = getConfiguredInterviewApiBase();
+export const INTERVIEW_API_BASES = [`${API_PREFIX}/interview`, `${API_PREFIX}/interviews`];
+export const INTERVIEW_API_BASE = `${API_PREFIX}/interview`;
 export const INTERVIEW_SCHEDULE_API =
-  normalizeUrl(import.meta.env.VITE_INTERVIEW_SCHEDULE_API) ||
   `${INTERVIEW_API_BASE}/schedule`;
 export const DEFAULT_INTERVIEW_MANAGER_ID = (() => {
   const parsed = Number.parseInt(import.meta.env.VITE_DEFAULT_INTERVIEW_MANAGER_ID, 10);

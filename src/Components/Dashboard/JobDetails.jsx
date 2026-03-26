@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-const BASE_URL = "https://farrandly-interalar-talon.ngrok-free.dev/api";
+// Use relative paths so Docker/nginx routing works across environments.
+const BASE_URL = "/api";
 
 const initialForm = {
   fullName: "",

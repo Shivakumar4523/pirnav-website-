@@ -10,13 +10,13 @@ This backend implements every `/api/*` endpoint the React app calls:
 ## Configure
 
 ```bash
-cd Pirnav/backend
+cd backend
 cp .env.example .env
 ```
 
-Default admin credentials (from `.env.example`):
-- `ADMIN_EMAIL=admin@pirnav.com`
-- `ADMIN_PASSWORD=admin1234`
+Set these in `backend/.env` (or via environment variables in Docker):
+- `ADMIN_EMAIL`
+- `ADMIN_PASSWORD`
 
 ## Run
 
@@ -25,10 +25,9 @@ npm install
 npm run dev
 ```
 
-Server listens on `PORT` (default `5001`).
+Server listens on `PORT` (default `5000`).
 
 ## Frontend
 
-Make sure the frontend points at this backend:
-`Pirnav/app/.env.example` uses `VITE_API_BASE_URL=http://localhost:5001`.
+Frontend calls the backend via relative `/api/*` paths (proxied by nginx).
 

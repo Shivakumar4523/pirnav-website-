@@ -5,7 +5,7 @@ import "./Admin.css";
 import { clearAdminToken, getAdminHeaders, getAdminToken } from "./adminAuth";
 
 const API_BASE =
-  "https://farrandly-interalar-talon.ngrok-free.dev/api/Jobs";
+  "/api/Jobs";
 
 const AdminJobs = () => {
   const navigate = useNavigate();

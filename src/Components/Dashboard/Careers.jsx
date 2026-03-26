@@ -6,7 +6,8 @@ import FeatureCard from "../../components/common/FeatureCard";
 import { whyJoinUs } from "../../data/siteContent";
 import "./Careers.css";
 
-const BASE_URL = "https://farrandly-interalar-talon.ngrok-free.dev/api";
+// Use relative paths so Docker/nginx routing works across environments.
+const BASE_URL = "/api";
 const JOB_PREVIEW_FALLBACK =
   "Join a collaborative team building reliable software, modern platforms, and high-impact solutions for growing businesses.";
 

@@ -10,8 +10,7 @@ import "./Admin.css";
 import { clearAdminToken, getAdminHeaders, getAdminToken } from "./adminAuth";
  
 const API_BASE =
-
-  "https://farrandly-interalar-talon.ngrok-free.dev/api/Contact";
+  "/api/Contact";
  
 const ContactMessages = () => {
 

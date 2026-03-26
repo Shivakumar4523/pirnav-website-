@@ -15,7 +15,7 @@ import {
 } from "./applicationStatus";
  
 const BASE_URL =
-  "https://farrandly-interalar-talon.ngrok-free.dev/api/Admin";
+  "/api/Admin";
  
 const DashboardHome = () => {
   const navigate = useNavigate();

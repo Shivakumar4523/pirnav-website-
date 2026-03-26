@@ -77,7 +77,7 @@ const ContactUs = () => {
 
     try {
       const response = await fetch(
-        "https://farrandly-interalar-talon.ngrok-free.dev/api/Contact",
+        "/api/Contact",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

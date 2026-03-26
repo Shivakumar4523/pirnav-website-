@@ -40,7 +40,11 @@ router.post("/login", (req, res) => {
     return res.status(401).json({ message: "Invalid credentials" });
   }
 
-  const secret = process.env.ADMIN_JWT_SECRET || "dev-secret-change-me";
+  const secret = process.env.ADMIN_JWT_SECRET;
+
+  if (!secret) {
+    return res.status(500).json({ message: "Server misconfigured (missing ADMIN_JWT_SECRET)" });
+  }
   const token = jwt.sign(
     {
       email: adminUser.email,

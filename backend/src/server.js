@@ -26,7 +26,9 @@ const corsOrigins = corsOriginsEnv
 
 app.use(
   cors({
-    origin: corsOrigins.length ? corsOrigins : true,
+    // Default to deny-by-default for security.
+    // When using nginx same-origin routing, CORS is not required.
+    origin: corsOrigins.length ? corsOrigins : false,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -108,7 +110,7 @@ function seedSampleJobs() {
 
 seedSampleJobs();
 
-const port = Number(process.env.PORT || 5001);
+const port = Number(process.env.PORT || 5000);
 app.listen(port, "0.0.0.0", () => {
   // eslint-disable-next-line no-console
   console.log(`[pirnav-backend] listening on port ${port}`);

@@ -1,67 +1,16 @@
 import { getAdminHeaders } from "./adminAuth";
 
-const LEGACY_JOB_APPLICATIONS_API_BASE =
-  "https://farrandly-interalar-talon.ngrok-free.dev/api/JobApplications";
+// Use same-origin relative API calls so Docker/nginx routing works in any environment.
+const API_PREFIX = "/api";
 
-const normalizeUrl = (value) => String(value || "").trim().replace(/\/+$/, "");
-
-const getRuntimeApiOrigin = () => {
-  if (typeof window === "undefined") {
-    return "";
-  }
-
-  const { origin, port } = window.location;
-  return port === "5173" || port === "4173" ? "" : origin;
-};
-
-const joinUrl = (base, path) => {
-  const normalizedBase = normalizeUrl(base);
-  const normalizedPath = String(path || "").replace(/^\/+/, "");
-
-  if (!normalizedBase) {
-    return "";
-  }
-
-  return `${normalizedBase}/${normalizedPath}`;
-};
-
-const getConfiguredJobApplicationsApiBase = () =>
-  normalizeUrl(import.meta.env.VITE_JOB_APPLICATIONS_API_BASE) ||
-  joinUrl(normalizeUrl(import.meta.env.VITE_API_BASE_URL), "/api/JobApplications") ||
-  LEGACY_JOB_APPLICATIONS_API_BASE;
-
-const getCandidateApiBases = () => {
-  const configuredJobApplicationsBase = normalizeUrl(
-    import.meta.env.VITE_JOB_APPLICATIONS_API_BASE
-  );
-  const configuredCandidatesBase = normalizeUrl(
-    import.meta.env.VITE_CANDIDATES_API_BASE
-  );
-  const configuredApiOrigin = normalizeUrl(import.meta.env.VITE_API_BASE_URL);
-  const runtimeOrigin = normalizeUrl(getRuntimeApiOrigin());
-  const originCandidates = [
-    configuredApiOrigin,
-    runtimeOrigin,
-    "https://localhost:5001",
-    "http://localhost:5000",
-    LEGACY_JOB_APPLICATIONS_API_BASE.replace(/\/api\/JobApplications$/i, ""),
-  ].filter(Boolean);
-
-  const exactBases = [
-    configuredJobApplicationsBase,
-    configuredCandidatesBase,
-  ].filter(Boolean);
-
-  const derivedBases = originCandidates.flatMap((origin) => [
-    joinUrl(origin, "/api/JobApplications"),
-    joinUrl(origin, "/api/candidates"),
-  ]);
-
-  return [...new Set([...exactBases, ...derivedBases].filter(Boolean))];
-};
-
-export const JOB_APPLICATIONS_API_BASES = getCandidateApiBases();
-export const JOB_APPLICATIONS_API_BASE = getConfiguredJobApplicationsApiBase();
+// Backend implements:
+// - /api/JobApplications (admin list + status update)
+// - /api/candidates (alias with /:id/status shape used by some UI calls)
+export const JOB_APPLICATIONS_API_BASES = [
+  `${API_PREFIX}/JobApplications`,
+  `${API_PREFIX}/candidates`,
+];
+export const JOB_APPLICATIONS_API_BASE = `${API_PREFIX}/JobApplications`;
 
 export const applicationStatusLabels = {
   pending: "Pending",

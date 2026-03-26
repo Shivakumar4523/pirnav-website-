@@ -6,7 +6,7 @@ import "./Admin.css";
 import { getAdminToken, saveAdminToken } from "./adminAuth";
 
 const API_BASE =
-  "https://farrandly-interalar-talon.ngrok-free.dev/api/Admin/login";
+  "/api/Admin/login";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
