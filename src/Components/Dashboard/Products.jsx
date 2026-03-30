@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import SectionWrapper from "../../components/common/SectionWrapper";
+import SectionWrapper from "../../Components/common/SectionWrapper";
 import { productCatalog } from "../../data/siteContent";
 import "./Products.css";
 

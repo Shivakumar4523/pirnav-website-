@@ -1,3 +1,5 @@
+import { JSON_HEADERS } from "../../lib/api.js";
+
 export const ADMIN_TOKEN_KEY = "adminToken";
 
 export const getAdminToken = () => {
@@ -30,8 +32,7 @@ export const getAdminHeaders = (token = getAdminToken()) => {
   }
 
   return {
+    ...JSON_HEADERS,
     Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
-    "ngrok-skip-browser-warning": "true",
   };
 };

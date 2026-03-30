@@ -1,8 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-import path from "path";
-import { fileURLToPath } from "url";
 
 import jobsRouter from "./routes/jobs.js";
 import contactRouter from "./routes/contact.js";
@@ -13,10 +11,8 @@ import { commit, getStore, nextId } from "./storage/store.js";
 
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const app = express();
+app.disable("x-powered-by");
 
 const corsOriginsEnv = process.env.CORS_ORIGINS || "";
 const corsOrigins = corsOriginsEnv
@@ -112,7 +108,6 @@ seedSampleJobs();
 
 const port = Number(process.env.PORT || 5000);
 app.listen(port, "0.0.0.0", () => {
-  // eslint-disable-next-line no-console
   console.log(`[pirnav-backend] listening on port ${port}`);
 });
 

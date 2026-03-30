@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import Button from "../../components/common/Button";
-import SectionWrapper from "../../components/common/SectionWrapper";
-import StatsSection from "../../components/common/StatsSection";
-import TechnologyMarquee from "../../components/common/TechnologyMarquee";
+import Button from "../../Components/common/Button";
+import SectionWrapper from "../../Components/common/SectionWrapper";
+import StatsSection from "../../Components/common/StatsSection";
+import TechnologyMarquee from "../../Components/common/TechnologyMarquee";
 import { productCatalog, serviceItems } from "../../data/siteContent";
 import "./Dashboard.css";
 

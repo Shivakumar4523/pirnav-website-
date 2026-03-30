@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, Mail, MapPin, Phone } from "lucide-react";
-import SectionWrapper from "../../components/common/SectionWrapper";
+import SectionWrapper from "../../Components/common/SectionWrapper";
+import { API_ROUTES, JSON_HEADERS } from "../../lib/api.js";
 
 const locationGroups = [
   {
@@ -76,19 +77,16 @@ const ContactUs = () => {
     const selectedPurpose = formData.purposeOfContact;
 
     try {
-      const response = await fetch(
-        "/api/Contact",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ...formData,
-            name: formData.name.trim(),
-            purposeOfContact: selectedPurpose,
-            subject: selectedPurpose,
-          }),
-        }
-      );
+      const response = await fetch(API_ROUTES.contact, {
+        method: "POST",
+        headers: JSON_HEADERS,
+        body: JSON.stringify({
+          ...formData,
+          name: formData.name.trim(),
+          purposeOfContact: selectedPurpose,
+          subject: selectedPurpose,
+        }),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to send message");

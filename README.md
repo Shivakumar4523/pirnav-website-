@@ -58,7 +58,7 @@ docker compose up -d --build
 ## Docker Files
 - `backend/Dockerfile`: Node/Express API container (port `5000`)
 - `frontend/Dockerfile`: Vite build + nginx container (port `80`)
-- `nginx.conf`: proxies `/api/` to `http://backend:5000`
+- `frontend/nginx.conf`: proxies `/api/` to `http://backend:5000`
 - `docker-compose.yml`: orchestrates frontend + backend
 
 ## EC2 (Ubuntu) Deployment Steps

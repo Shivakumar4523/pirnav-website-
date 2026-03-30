@@ -1,16 +1,11 @@
 import { getAdminHeaders } from "./adminAuth";
+import {
+  API_ROUTES,
+  getApiErrorMessage,
+  parseJsonSafely,
+} from "../../lib/api.js";
 
-// Use same-origin relative API calls so Docker/nginx routing works in any environment.
-const API_PREFIX = "/api";
-
-// Backend implements:
-// - /api/JobApplications (admin list + status update)
-// - /api/candidates (alias with /:id/status shape used by some UI calls)
-export const JOB_APPLICATIONS_API_BASES = [
-  `${API_PREFIX}/JobApplications`,
-  `${API_PREFIX}/candidates`,
-];
-export const JOB_APPLICATIONS_API_BASE = `${API_PREFIX}/JobApplications`;
+export const JOB_APPLICATIONS_API_BASE = API_ROUTES.jobApplications;
 
 export const applicationStatusLabels = {
   pending: "Pending",
@@ -29,46 +24,8 @@ export const normalizeApplicationStatus = (status) => {
 export const formatApplicationStatusForApi = (status) =>
   applicationStatusLabels[normalizeApplicationStatus(status)];
 
-const getStatusUpdateAttempts = (applicationId, statusLabel) => {
-  const attempts = JOB_APPLICATIONS_API_BASES.flatMap((base) => {
-    const prefersCandidatesShape = /\/api\/candidates$/i.test(base);
-
-    const candidateRouteAttempts = [
-      {
-        url: `${base}/${applicationId}/status`,
-        body: { status: statusLabel },
-      },
-      {
-        url: `${base}/${applicationId}/status`,
-        body: { applicationId, status: statusLabel },
-      },
-    ];
-
-    const jobApplicationsRouteAttempt = {
-      url: `${base}/status`,
-      body: { applicationId, status: statusLabel },
-    };
-
-    return prefersCandidatesShape
-      ? [...candidateRouteAttempts, jobApplicationsRouteAttempt]
-      : [jobApplicationsRouteAttempt, ...candidateRouteAttempts];
-  });
-
-  const seen = new Set();
-
-  return attempts.filter((attempt) => {
-    const key = `${attempt.url}::${JSON.stringify(attempt.body)}`;
-    if (seen.has(key)) {
-      return false;
-    }
-
-    seen.add(key);
-    return true;
-  });
-};
-
 const getStatusUpdateNetworkMessage = () =>
-  "Unable to reach the status update API. Check that the backend is running, the port matches your API server instead of the Vite dev server, and CORS allows this frontend origin. You can set VITE_API_BASE_URL, VITE_JOB_APPLICATIONS_API_BASE, or VITE_CANDIDATES_API_BASE to point to the correct backend.";
+  "Unable to reach the status update API. Check that the backend is running and the frontend can reach /api.";
 
 export const getApplicationSelectedDate = (application) =>
   application?.selectedDate ||
@@ -99,96 +56,48 @@ export const requestApplicationStatusUpdate = async ({
   }
 
   const normalizedStatus = normalizeApplicationStatus(nextStatus);
-  const statusLabel = formatApplicationStatusForApi(normalizedStatus);
-  const attempts = getStatusUpdateAttempts(applicationId, statusLabel);
-  const networkErrors = [];
-  let fallbackFailure = null;
+  const endpoint = `${JOB_APPLICATIONS_API_BASE}/${applicationId}/status`;
 
-  console.log("[ApplicationStatus] Status update attempts:", {
-    applicationId,
-    nextStatus: statusLabel,
-    attempts: attempts.map((attempt) => ({
-      url: attempt.url,
-      body: attempt.body,
-    })),
-  });
+  try {
+    const response = await fetch(endpoint, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify({
+        status: formatApplicationStatusForApi(normalizedStatus),
+      }),
+    });
+    const responseData = await parseJsonSafely(response);
 
-  for (const attempt of attempts) {
-    try {
-      const response = await fetch(attempt.url, {
-        method: "PUT",
-        headers,
-        body: JSON.stringify(attempt.body),
-      });
-      const responseData = await response.json().catch(() => null);
-
-      console.log(
-        "[ApplicationStatus] Status update response:",
-        responseData ?? { ok: response.ok, status: response.status, url: attempt.url }
-      );
-
-      if (response.status === 401) {
-        return {
-          ok: false,
-          unauthorized: true,
-          message: "Unauthorized",
-          data: responseData,
-        };
-      }
-
-      if (response.ok) {
-        return { ok: true, data: responseData, endpoint: attempt.url };
-      }
-
-      const message =
-        responseData?.message ||
-        responseData?.error ||
-        responseData?.title ||
-        "Status update failed";
-
-      if ([400, 404, 405, 415].includes(response.status)) {
-        fallbackFailure = {
-          ok: false,
-          message,
-          data: responseData,
-          status: response.status,
-          endpoint: attempt.url,
-        };
-        continue;
-      }
-
+    if (response.status === 401) {
       return {
         ok: false,
-        message,
+        unauthorized: true,
+        message: "Unauthorized",
         data: responseData,
-        status: response.status,
-        endpoint: attempt.url,
       };
-    } catch (error) {
-      console.error("[ApplicationStatus] Status update network error:", {
-        url: attempt.url,
-        error: error.message || error,
-      });
-      networkErrors.push({
-        url: attempt.url,
-        message: error.message || "Network error",
-      });
     }
-  }
 
-  if (networkErrors.length === attempts.length) {
+    if (response.ok) {
+      return {
+        ok: true,
+        data: responseData,
+        endpoint,
+      };
+    }
+
+    return {
+      ok: false,
+      message: getApiErrorMessage(responseData, "Status update failed."),
+      data: responseData,
+      status: response.status,
+      endpoint,
+    };
+  } catch (error) {
     return {
       ok: false,
       message: getStatusUpdateNetworkMessage(),
-      data: { networkErrors },
+      data: { message: error.message || "Network error" },
+      endpoint,
     };
   }
-
-  return (
-    fallbackFailure || {
-      ok: false,
-      message: "Status update failed",
-      data: { networkErrors },
-    }
-  );
 };

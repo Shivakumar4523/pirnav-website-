@@ -1,5 +1,5 @@
-import SectionWrapper from "../../components/common/SectionWrapper";
-import ServiceCard from "../../components/common/ServiceCard";
+import SectionWrapper from "../../Components/common/SectionWrapper";
+import ServiceCard from "../../Components/common/ServiceCard";
 import { serviceItems } from "../../data/siteContent";
 
 const PublicServices = () => {

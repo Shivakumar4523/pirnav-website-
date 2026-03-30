@@ -4,9 +4,7 @@ import { Lock, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./Admin.css";
 import { getAdminToken, saveAdminToken } from "./adminAuth";
-
-const API_BASE =
-  "/api/Admin/login";
+import { API_ROUTES, JSON_HEADERS } from "../../lib/api.js";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
@@ -48,11 +46,9 @@ const AdminLogin = () => {
     setErrors({});
 
     try {
-      const response = await fetch(API_BASE, {
+      const response = await fetch(API_ROUTES.adminLogin, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: JSON_HEADERS,
         body: JSON.stringify({ email, password }),
       });
 
@@ -72,11 +68,6 @@ const AdminLogin = () => {
       }
 
       saveAdminToken(token);
-      console.log("[AdminLogin] adminToken saved after login:", {
-        present: true,
-        preview: `${token.slice(0, 12)}...`,
-      });
-
       navigate("/admin", { replace: true });
 
     } catch {

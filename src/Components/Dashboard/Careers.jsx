@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BriefcaseBusiness, GraduationCap, Search } from "lucide-react";
-import SectionWrapper from "../../components/common/SectionWrapper";
-import FeatureCard from "../../components/common/FeatureCard";
+import SectionWrapper from "../../Components/common/SectionWrapper";
+import FeatureCard from "../../Components/common/FeatureCard";
 import { whyJoinUs } from "../../data/siteContent";
+import { API_ROUTES } from "../../lib/api.js";
 import "./Careers.css";
-
-// Use relative paths so Docker/nginx routing works across environments.
-const BASE_URL = "/api";
 const JOB_PREVIEW_FALLBACK =
   "Join a collaborative team building reliable software, modern platforms, and high-impact solutions for growing businesses.";
 
@@ -42,9 +40,7 @@ const Careers = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/Jobs/public`, {
-          headers: { "ngrok-skip-browser-warning": "true" },
-        });
+        const response = await fetch(API_ROUTES.publicJobs);
         const data = await response.json();
 
         if (Array.isArray(data)) {

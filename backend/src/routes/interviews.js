@@ -1,5 +1,4 @@
 import express from "express";
-import path from "path";
 import { commit, getStore, nextId } from "../storage/store.js";
 import { requireAdminAuth } from "../middleware/auth.js";
 
@@ -134,7 +133,7 @@ router.post("/", requireAdminAuth, (req, res) => {
 router.put("/:id", requireAdminAuth, (req, res) => {
   const payload = req.body || {};
   const id = Number(req.params.id);
-  const { interviews, jobApplications } = getStore();
+  const { interviews } = getStore();
 
   const interview = interviews.find((i) => Number(i.id) === id);
   if (!interview) return res.status(404).json({ message: "Interview not found" });

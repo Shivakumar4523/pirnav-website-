@@ -15,7 +15,11 @@ const Navbar = () => {
   const location = useLocation();
 
   useEffect(() => {
-    setMobileOpen(false);
+    const closeMenuFrame = window.requestAnimationFrame(() => {
+      setMobileOpen(false);
+    });
+
+    return () => window.cancelAnimationFrame(closeMenuFrame);
   }, [location.pathname]);
 
   useEffect(() => {

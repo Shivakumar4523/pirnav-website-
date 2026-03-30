@@ -29,11 +29,10 @@ const Navbar = () => {
   const location = useLocation();
 
   useEffect(() => {
-    setMobileOpen(false);
-    setServicesMenuOpen(false);
-    setMobileServicesOpen(false);
-
     const syncScrollState = window.requestAnimationFrame(() => {
+      setMobileOpen(false);
+      setServicesMenuOpen(false);
+      setMobileServicesOpen(false);
       window.dispatchEvent(new Event("scroll"));
     });
 

@@ -1,6 +1,6 @@
-import SectionWrapper from "../../components/common/SectionWrapper";
-import FeatureCard from "../../components/common/FeatureCard";
-import StatsSection from "../../components/common/StatsSection";
+import SectionWrapper from "../../Components/common/SectionWrapper";
+import FeatureCard from "../../Components/common/FeatureCard";
+import StatsSection from "../../Components/common/StatsSection";
 import { aboutPillars, homeStats } from "../../data/siteContent";
 
 const About = () => {

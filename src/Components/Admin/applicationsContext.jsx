@@ -10,6 +10,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { clearAdminToken, getAdminHeaders, getAdminToken } from "./adminAuth";
 import {
+  getApiErrorMessage,
+  parseJsonSafely,
+} from "../../lib/api.js";
+import {
   JOB_APPLICATIONS_API_BASE,
   applicationStatusOptions,
   getApplicationSelectedDate,
@@ -226,14 +230,10 @@ export const AdminApplicationsProvider = ({ children }) => {
         throw new Error("Failed to fetch applications");
       }
 
-      const data = await response.json();
+      const data = await parseJsonSafely(response);
       const list = Array.isArray(data) ? data : data.applications || data.data || [];
       setApplications(list.map(normalizeApplication));
     } catch (requestError) {
-      console.error(
-        "[ApplicationsContext] Fetch error:",
-        requestError.response?.data || requestError.message || requestError
-      );
       setError(requestError.message || "Unable to load applications.");
     } finally {
       setLoading(false);
@@ -389,19 +389,12 @@ export const AdminApplicationsProvider = ({ children }) => {
       };
 
       try {
-        console.log("[ApplicationsContext] Interview schedule payload:", payload);
-
         const response = await fetch(INTERVIEW_API_BASE, {
           method: "POST",
           headers,
           body: JSON.stringify(payload),
         });
-
-        const responseData = await response.json().catch(() => null);
-        console.log(
-          "[ApplicationsContext] Interview schedule response:",
-          responseData ?? { ok: response.ok, status: response.status }
-        );
+        const responseData = await parseJsonSafely(response);
 
         if (response.status === 401) {
           handleUnauthorized();
@@ -413,13 +406,7 @@ export const AdminApplicationsProvider = ({ children }) => {
         }
 
         if (!response.ok) {
-          throw new Error(
-            responseData?.message ||
-              responseData?.error ||
-              responseData?.detail ||
-              responseData?.title ||
-              "Unable to schedule interview."
-          );
+          throw new Error(getApiErrorMessage(responseData, "Unable to schedule interview."));
         }
 
         const interviewDetails = extractInterviewDetails(responseData) || {
@@ -446,11 +433,6 @@ export const AdminApplicationsProvider = ({ children }) => {
           message: "Interview scheduled successfully.",
         };
       } catch (requestError) {
-        console.error(
-          "[ApplicationsContext] Interview schedule error:",
-          requestError.response?.data || requestError.message || requestError
-        );
-
         return {
           ok: false,
           message: requestError.message || "Unable to schedule interview.",

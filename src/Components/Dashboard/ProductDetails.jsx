@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Button from "../../components/common/Button";
-import SectionWrapper from "../../components/common/SectionWrapper";
-import ServiceContent from "../../components/common/ServiceContent";
-import ServiceHero from "../../components/common/ServiceHero";
+import Button from "../../Components/common/Button";
+import SectionWrapper from "../../Components/common/SectionWrapper";
+import ServiceContent from "../../Components/common/ServiceContent";
+import ServiceHero from "../../Components/common/ServiceHero";
 import { getProductById } from "../../data/productsData";
 import "./Products.css";
 

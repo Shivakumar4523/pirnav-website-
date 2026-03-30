@@ -32,15 +32,15 @@ Route modules:
   - Admin: `GET /api/JobApplications`, `PUT /api/JobApplications/status`, `PUT /api/JobApplications/:id/status`, `GET /api/JobApplications/download/:id`
   - Alias path also enabled: `/api/candidates`
 - `src/routes/interviews.js`
-  - `GET /api/interview`, `POST /api/interview`, `PUT /api/interview/:id`
-  - Alias path also enabled: `/api/interviews`
+  - `GET /api/interviews`, `POST /api/interviews`, `PUT /api/interviews/:id`
+  - Alias path also enabled: `/api/interview`
 - `src/routes/contact.js`
   - Public: `POST /api/Contact`
   - Admin: `GET /api/Contact`, `GET /api/Contact/unread-count`, `GET /api/Contact/:id`, `PUT /api/Contact/mark-read/:id`, `DELETE /api/Contact/:id`
 
 ## Environment Variables (Backend)
 
-Use `backend/.env`:
+Use the repo root `.env` file when running with `docker compose`, or `backend/.env` if you start the backend directly:
 
 - `PORT=5000`
 - `ADMIN_JWT_SECRET=...`
@@ -48,14 +48,10 @@ Use `backend/.env`:
 - `ADMIN_PASSWORD=...`
 - `CORS_ORIGINS=http://localhost:5173` (comma-separated for multiple origins)
 
-## API Call Changes Needed for New Deployment
-
-When moving to Docker, staging, or production, update frontend API base URLs so requests do not point to old domains.
-
 ### Frontend API routing
 
 The frontend uses relative `/api/*` endpoints, and Docker/nginx proxies `/api` to the backend.
-Because of this, there should be no need to configure `VITE_API_BASE_URL` for production deployments.
+Because of this, there should be no need to configure a separate frontend API base URL for production deployments.
 
 ## Docker Notes
 
@@ -67,7 +63,7 @@ Important: if React runs in the browser, `backend:5000` works only inside Docker
 
 2) Separate public backend host:
 - Expose backend as `https://api.your-domain.com`
-- Set `VITE_API_BASE_URL=https://api.your-domain.com`
+- Update the frontend request helper to target that host instead of relative `/api`
 - Ensure `CORS_ORIGINS` includes frontend domain
 
 ## Quick Post-Deploy Validation

@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./Admin.css";
 import { clearAdminToken, getAdminHeaders, getAdminToken } from "./adminAuth";
+import { API_ROUTES } from "../../lib/api.js";
 
-const API_BASE =
-  "/api/Jobs";
+const API_BASE = API_ROUTES.jobs;
 
 const AdminJobs = () => {
   const navigate = useNavigate();
@@ -31,20 +31,9 @@ const AdminJobs = () => {
     mandatorySkills: "",
   });
 
-  const getHeaders = () => {
-    return getAdminHeaders(token);
-  };
+  const getHeaders = useCallback(() => getAdminHeaders(token), [token]);
 
-  useEffect(() => {
-    if (!token) {
-      navigate("/admin-login", { replace: true });
-      return;
-    }
-
-    fetchJobs();
-  }, [navigate, token]);
-
-  const fetchJobs = async () => {
+  const fetchJobs = useCallback(async () => {
     try {
       setLoading(true);
       const headers = getHeaders();
@@ -65,7 +54,16 @@ const AdminJobs = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [getHeaders, navigate]);
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/admin-login", { replace: true });
+      return;
+    }
+
+    fetchJobs();
+  }, [fetchJobs, navigate, token]);
 
   const handleSave = async () => {
     try {

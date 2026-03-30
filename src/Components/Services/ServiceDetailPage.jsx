@@ -1,7 +1,7 @@
-import SectionWrapper from "../../components/common/SectionWrapper";
-import ServiceContent from "../../components/common/ServiceContent";
-import ServiceHero from "../../components/common/ServiceHero";
-import TechnologyGrid from "../../components/common/TechnologyGrid";
+import SectionWrapper from "../../Components/common/SectionWrapper";
+import ServiceContent from "../../Components/common/ServiceContent";
+import ServiceHero from "../../Components/common/ServiceHero";
+import TechnologyGrid from "../../Components/common/TechnologyGrid";
 import { serviceItems } from "../../data/siteContent";
 
 const ServiceDetailPage = ({ slug }) => {

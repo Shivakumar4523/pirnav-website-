@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-
-// Use relative paths so Docker/nginx routing works across environments.
-const BASE_URL = "/api";
+import { API_ROUTES } from "../../lib/api.js";
 
 const initialForm = {
   fullName: "",
@@ -32,9 +30,7 @@ const JobDetails = () => {
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/Jobs/public/${id}`, {
-          headers: { "ngrok-skip-browser-warning": "true" },
-        });
+        const response = await fetch(`${API_ROUTES.publicJobs}/${id}`);
         const data = await response.json();
         setJob(data);
       } catch (error) {
@@ -108,9 +104,8 @@ const JobDetails = () => {
     form.append("Resume", formData.resume);
 
     try {
-      const response = await fetch(`${BASE_URL}/JobApplications`, {
+      const response = await fetch(API_ROUTES.jobApplications, {
         method: "POST",
-        headers: { "ngrok-skip-browser-warning": "true" },
         body: form,
       });
 
